@@ -17,6 +17,7 @@ export default class Shader {
     matrixLocation: WebGLUniformLocation;
     textureLocation: WebGLUniformLocation;
     normalLocation: WebGLUniformLocation;
+    locationCache:  { [key: string]: WebGLUniformLocation } = {};
 
     constructor(context: WebGLRenderingContext, shaderCode: string = defaultShader) {
         this.context = context;
@@ -30,8 +31,9 @@ export default class Shader {
     }
 
     setValue(key: string, value: any, type: 'float' | 'matrix' | 'texture' | 'int' | 'vec2' | 'vec3' | 'vec4' | 'bool') {
-        const location = this.context.getUniformLocation(this.program, key);
+        const location = this.locationCache[key] || this.context.getUniformLocation(this.program, key);
         if (!location) return;
+        if(!this.locationCache[key]) this.locationCache[key] = location;
         this.context.useProgram(this.program);
         switch (type) {
             case 'float':

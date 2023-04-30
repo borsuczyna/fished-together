@@ -1,7 +1,8 @@
 import Left from "../left/main";
 import Shader from "../shader/shader";
-import { Vector2D, Vector3D, Vector4D, Size } from "../uitls/position";
-import Settings from "../uitls/Settings";
+import { radians } from "../utils/angle";
+import { Vector2D, Vector3D, Vector4D, Size } from "../utils/position";
+import Settings from "../utils/Settings";
 import Cache, { TextureInfo } from "./cache";
 import Color from "./color";
 import Light from "./light";
@@ -49,6 +50,8 @@ interface DrawCall {
     worldPosition?: Vector3D;
     worldSize?: Vector2D;
     texCoords?: number[];
+    rotation: number;
+    rotationCenter: Vector2D;
 };
 
 export default class Render {
@@ -61,7 +64,7 @@ export default class Render {
     lightDirection: Vector2D = new Vector2D();
     lightColor: Color = new Color();
     lights: Light[] = [];
-    normalPower: number =- 1;
+    normalPower: number = 1;
 
     constructor(context: WebGLRenderingContext, parent: Left) {
         this.parent = parent;
@@ -108,7 +111,9 @@ export default class Render {
         size: Size,
         url: string | [string, 'wrap' | 'clamp'],
         shader: Shader = this.shader,
-        color: Color | Color[] = Color.White()
+        color: Color | Color[] = Color.White(),
+        rotation: number = 0,
+        rotationCenter: Vector2D = new Vector2D(0.5, 0.5)
     ) {
         let texture: TextureInfo = this.cache.getTextureFromCache(url);
         let canvas: HTMLCanvasElement | OffscreenCanvas = this.context.canvas;
@@ -123,7 +128,9 @@ export default class Render {
             shader,
             color,
             uw: 1,
-            uh: 1
+            uh: 1,
+            rotation,
+            rotationCenter
         });
     }
 
@@ -132,7 +139,9 @@ export default class Render {
         size: Size,
         url: string | [string, 'wrap' | 'clamp'],
         shader: Shader = this.shader,
-        color: Color | Color[] = Color.White()
+        color: Color | Color[] = Color.White(),
+        rotation: number = 0,
+        rotationCenter: Vector2D = new Vector2D(0.5, 0.5)
     ) {
         let worldPosition: Vector3D = position;
         let worldSize: Vector2D = size;
@@ -155,6 +164,8 @@ export default class Render {
             uh: 1,
             worldPosition: worldPosition,
             worldSize: worldSize,
+            rotation,
+            rotationCenter
         });
     }
 
@@ -164,7 +175,9 @@ export default class Render {
         url: string | [string, 'wrap' | 'clamp'],
         normal: string | [string, 'wrap' | 'clamp'],
         shader: Shader = this.shader,
-        color: Color | Color[] = Color.White()
+        color: Color | Color[] = Color.White(),
+        rotation: number = 0,
+        rotationCenter: Vector2D = new Vector2D(0.5, 0.5)
     ) {
         let texture: TextureInfo = this.cache.getTextureFromCache(url);
         let normalTexture: TextureInfo = this.cache.getTextureFromCache(normal);
@@ -181,7 +194,9 @@ export default class Render {
             shader,
             color,
             uw: 1,
-            uh: 1
+            uh: 1,
+            rotation,
+            rotationCenter
         });
     }
 
@@ -192,7 +207,8 @@ export default class Render {
         normal: string | [string, 'wrap' | 'clamp'],
         shader: Shader = this.shader,
         color: Color | Color[] = Color.White(),
-        rotation: number = 0
+        rotation: number = 0,
+        rotationCenter: Vector2D = new Vector2D(0.5, 0.5)
     ) {
         let worldPosition: Vector3D = position;
         let worldSize: Vector2D = size;
@@ -217,6 +233,8 @@ export default class Render {
             uh: 1,
             worldPosition: worldPosition,
             worldSize: worldSize,
+            rotation,
+            rotationCenter
         });
     }
     
@@ -226,7 +244,9 @@ export default class Render {
         uv: Vector4D,
         url: string | [string, 'wrap' | 'clamp'],
         shader: Shader = this.shader,
-        color: Color | Color[] = Color.White()
+        color: Color | Color[] = Color.White(),
+        rotation: number = 0,
+        rotationCenter: Vector2D = new Vector2D(0.5, 0.5)
     ) {
         let texture: TextureInfo = this.cache.getTextureFromCache(url);
         let canvas: HTMLCanvasElement | OffscreenCanvas = this.context.canvas;
@@ -251,7 +271,9 @@ export default class Render {
                 uv.z, uv.y,
                 uv.x, uv.w,
                 uv.z, uv.w,
-            ]
+            ],
+            rotation,
+            rotationCenter
         });
     }
 
@@ -259,7 +281,9 @@ export default class Render {
         position: Vector3D,
         size: Size,
         shader: Shader = this.shader,
-        color: Color | Color[] = Color.White()
+        color: Color | Color[] = Color.White(),
+        rotation: number = 0,
+        rotationCenter: Vector2D = new Vector2D(0.5, 0.5)
     ) {
         let canvas: HTMLCanvasElement | OffscreenCanvas = this.context.canvas;
 
@@ -272,7 +296,9 @@ export default class Render {
             shader,
             color,
             uw: 1,
-            uh: 1
+            uh: 1,
+            rotation,
+            rotationCenter
         });
     }
 
@@ -321,6 +347,11 @@ export default class Render {
         shader.setValue('directionalLightColor', this.lightColor.normalizedArray(), 'vec4');
         shader.setValue('screenSize', [this.context.canvas.width, this.context.canvas.height], 'vec2');
         shader.setValue('normalPower', this.normalPower, 'float');
+    }
+
+    private updateShaderRotation(shader: Shader, rotation: number, rotationCenter: Vector2D) {
+        shader.setValue('internal_rotation', radians(rotation), 'float');
+        shader.setValue('internal_rotationCenter', rotationCenter.array(), 'vec2');
     }
 
     private updateShaderDiffuse(shader: Shader, color: Color | Color[]) {
@@ -406,6 +437,7 @@ export default class Render {
 
             this.context.useProgram(drawCall.shader.program);
             this.updateDefaultShaderValues(drawCall.shader);
+            this.updateShaderRotation(drawCall.shader, drawCall.rotation, drawCall.rotationCenter);
             this.updateShaderDiffuse(drawCall.shader, drawCall.color);
             this.updateShaderUV(drawCall.shader, drawCall.uw, drawCall.uh);
             this.updateShaderLights(drawCall.shader, this.lights);

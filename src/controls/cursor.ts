@@ -1,4 +1,4 @@
-import { Vector2D } from "../uitls/position";
+import { Vector2D } from "../utils/position";
 
 export default class Cursor {
     private canvas: HTMLCanvasElement;

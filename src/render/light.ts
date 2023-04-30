@@ -1,4 +1,4 @@
-import { Vector3D } from "../uitls/position";
+import { Vector3D } from "../utils/position";
 import Color from "./color";
 
 export default class Light {
