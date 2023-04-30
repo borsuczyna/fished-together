@@ -11,6 +11,7 @@ struct VSInput {
 struct PSInput {
     vec2 TexCoord : TEXCOORD0;
     vec4 Position : POSITION0;
+    float Rotation : ROTATION0;
     vec2 Normal : NORMAL0;
 
     vec4 Diffuse;
@@ -29,11 +30,16 @@ PSInput vertexShaderFunction(VSInput VS) {
     PS.ScreenCoord.xy = (PS.Position.xy+1.0)/2.0;
     PS.ScreenCoord.y = 1.0-PS.ScreenCoord.y;
 
+    PS.Rotation = -VS.Rotation;
+
     return PS;
 }
 
 vec4 pixelShaderFunction(PSInput PS) {
     vec4 color = texture2D(texture, vec2(PS.TexCoord.x, PS.TexCoord.y));
+
+    // rotate normal
+    PS.Normal = mat2(cos(PS.Rotation), sin(PS.Rotation), -sin(PS.Rotation), cos(PS.Rotation)) * PS.Normal;
 
     color *= PS.Diffuse;
     color.rgb *= color.a;

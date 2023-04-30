@@ -16,8 +16,8 @@ import Light from './render/light';
 import './style.css';
 import { Vector3D, Size } from './utils/position';
 
-engine.render.lightColor = new Color(425, 0, 0);
-engine.render.lightDirection.set(2, -2).normalize();
+engine.render.lightColor = new Color(425, 300, 0);
+engine.render.lightDirection.set(2, 0).normalize();
 
 engine.camera = new FreeCam(engine);
 
