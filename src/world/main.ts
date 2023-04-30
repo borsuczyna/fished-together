@@ -3,6 +3,8 @@ import Body from "../physics/bodies/body";
 import Physics from "../physics/main";
 import { Vector2D } from "../utils/position";
 
+type AddElement = Body;
+
 export default class World {
     private physicsEngines: {
         [z: number]: Physics
@@ -10,7 +12,7 @@ export default class World {
     private _gravity: Vector2D = new Vector2D(0, -.001);
 
     constructor() {
-        
+        // where is the badger?
     }
 
     get bodies(): Body[] {
@@ -41,7 +43,11 @@ export default class World {
     }
 
     // Adding elements
-    add(element: Body): this {
+    add(element: AddElement | AddElement[]): this {
+        if(Array.isArray(element)) {
+            element.forEach(e => this.add(e));
+        }
+        
         // if its physics body
         if(element instanceof Body) {
             let z: number = element.position.z;

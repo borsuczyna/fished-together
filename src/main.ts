@@ -1,5 +1,6 @@
 import Left from './left/main';
 import Box from './physics/bodies/box';
+import Circle from './physics/bodies/circle';
 import FreeCam from './render/camera/freecam';
 
 let player: HTMLCanvasElement = document.getElementById('player') as HTMLCanvasElement;
@@ -28,7 +29,9 @@ let light: Light = new Light().setSize(100).setColor(new Color(1500/3, 1000/3, 0
 let ground = new Box(new Vector3D(-250, 0, 1), new Size(500, 100), true);
 let box1 = new Box(new Vector3D(-90, 250, 1), new Size(80, 80));
 let box2 = new Box(new Vector3D(-40, 150, 1), new Size(80, 80));
-engine.world.add(ground).add(box1).add(box2);
+let circle = new Circle(new Vector3D(-200, 150, 1), 80);
+circle.color = new Color(100, 100, 255);
+engine.world.add([ground, box1, box2, circle]);
 engine.wireframe = true;
 engine.world.gravity = new Vector2D(0, -0.0002);
 
