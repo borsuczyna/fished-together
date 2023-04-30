@@ -15,7 +15,7 @@ uniform vec2 screenSize;
 uniform float normalPower;
 
 // Lights
-#define MAX_LIGHTS 16
+#define MAX_LIGHTS 32
 
 uniform vec2 directionalLightDir;
 uniform vec4 directionalLightColor;

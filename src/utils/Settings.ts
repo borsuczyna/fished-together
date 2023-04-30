@@ -17,7 +17,7 @@ const Settings: Settings = {
     DrawChunkBorders: true,
     DrawCollisionProcession: false,
     CollisionCheckIterations: 40,
-    MaxLights: 16
+    MaxLights: 32
 };
 
 export default Settings;

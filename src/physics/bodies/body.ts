@@ -1,5 +1,7 @@
 import { Bodies } from "matter-js";
 import { Vector3D } from "../../utils/position";
+import Render from "../../render/render";
+import { degrees } from "../../utils/angle";
 
 export default class Body {
     defaultPosition: Vector3D;
@@ -11,6 +13,16 @@ export default class Body {
     }
 
     get position(): Vector3D {
-        return new Vector3D();
+        return new Vector3D(
+            this.body.position.x,
+            this.body.position.y,
+            this.defaultPosition.z
+        );
     };
+
+    get angle(): number {
+        return -degrees(this.body.angle);
+    }
+
+    draw(render: Render, wireframe: boolean = false) {}
 }

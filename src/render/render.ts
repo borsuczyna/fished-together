@@ -8,6 +8,7 @@ import Color from "./color";
 import Light from "./light";
 
 import rectangleShader from '../shader/shaders/rectangle.glsl?raw';
+import circleShader from '../shader/shaders/circle.glsl?raw';
 
 interface Buffers {
     position: WebGLBuffer;
@@ -88,6 +89,7 @@ export default class Render {
 
         // default shaders
         this.shaders.rectangle = new Shader(context, rectangleShader);
+        this.shaders.circle = new Shader(context, circleShader);
 
         //  Buffers
         let position = this.context.createBuffer();
@@ -254,7 +256,59 @@ export default class Render {
             size
         })
     }
-    
+
+    drawCircle(
+        position: Vector3D,
+        size: Size,
+        color: Color,
+        shader: Shader = this.shaders.circle
+    ) {
+        let matrix = m4.orthographic(0, this.canvas.width, this.canvas.height, 0, -100, 100);
+        matrix = m4.translate(matrix, position.x, position.y, position.z);
+        matrix = m4.scale(matrix, size.x, size.y, 1);
+
+        this.drawCalls.push({
+            texture: this.cache.getEmptyTexture(),
+            matrix,
+            shader,
+            color,
+            uw: 1,
+            uh: 1,
+            rotation: 0,
+            rotationCenter: new Vector2D(0.5, 0.5),
+            size
+        })
+    }
+
+    drawCircle3D(
+        position: Vector3D,
+        size: Size,
+        color: Color,
+        shader: Shader = this.shaders.circle
+    ) {
+        let worldPosition: Vector3D = position;
+        let worldSize: Vector2D = size;
+        position = this.getScreenFromWorldPosition(position);
+        size = this.getDimensions(size, position.z);
+
+        let matrix = m4.orthographic(0, this.canvas.width, this.canvas.height, 0, -100, 100);
+        matrix = m4.translate(matrix, position.x, position.y, position.z);
+        matrix = m4.scale(matrix, size.x, size.y, 1);
+        
+        this.drawCalls.push({
+            texture: this.cache.getEmptyTexture(),
+            matrix,
+            shader,
+            color,
+            uw: 1,
+            uh: 1,
+            worldPosition,
+            worldSize,
+            rotation: 0,
+            rotationCenter: new Vector2D(0.5, 0.5),
+            size
+        })
+    }
 
     drawImageWithNormal(
         position: Vector3D,

@@ -17,12 +17,15 @@ export default class Left {
     canvas: HTMLCanvasElement;
     context: WebGLRenderingContext;
     render: Render;
-    world: World = new World();
+    world: World;
     camera: Camera = new Camera(this);
     
     // Controllers
     keyboard: Keyboard;
     cursor: Cursor;
+
+    // Settings
+    wireframe: boolean = false;
 
     constructor(canvas: HTMLCanvasElement) {
         // Basic stuff
@@ -34,6 +37,9 @@ export default class Left {
 
         // Render
         this.render = new Render(this.context, this);
+
+        // Physics World
+        this.world = new World();
 
         // Controllers
         this.cursor = new Cursor(canvas);
@@ -47,6 +53,11 @@ export default class Left {
         // draw 2 empty images
         this.render.drawImage(new Vector3D(0, 0, 0), new Size(0, 0), '/empty.png');
         this.render.drawImage(new Vector3D(0, 0, 0), new Size(0, 0), '/empty.png');
+
+        // draw bodies
+        this.world.bodies.forEach(body => {
+            body.draw(this.render, this.wireframe);
+        });
 
         this.render.drawArrays();
 

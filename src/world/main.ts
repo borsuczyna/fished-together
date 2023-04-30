@@ -1,3 +1,4 @@
+import Left from "../left/main";
 import Body from "../physics/bodies/body";
 import Physics from "../physics/main";
 import { Vector2D } from "../utils/position";
@@ -6,10 +7,10 @@ export default class World {
     private physicsEngines: {
         [z: number]: Physics
     } = {};
-    private gravity: Vector2D = new Vector2D(0, -.001);
+    private _gravity: Vector2D = new Vector2D(0, -.001);
 
     constructor() {
-
+        
     }
 
     get bodies(): Body[] {
@@ -22,17 +23,31 @@ export default class World {
         this.physicsEngines[z] = new Physics();
     }
 
+    // Gravity
     setGravity(gravity: Vector2D): this {
-        this.gravity = gravity;
+        this._gravity = gravity;
         for(let z in this.physicsEngines) this.physicsEngines[z].gravity = gravity;
 
         return this;
     }
 
-    addBody(body: Body): this {
-        let z: number = body.position.z;
-        if(!this.physicsEngines[z]) this.createPhysicsEngine(z);
-        this.physicsEngines[z].addBody(body);
+    set gravity(gravity: Vector2D) {
+        this._gravity = gravity;
+        for(let z in this.physicsEngines) this.physicsEngines[z].gravity = gravity;
+    }
+
+    get gravity(): Vector2D {
+        return this._gravity;
+    }
+
+    // Adding elements
+    add(element: Body): this {
+        // if its physics body
+        if(element instanceof Body) {
+            let z: number = element.position.z;
+            if(!this.physicsEngines[z]) this.createPhysicsEngine(z);
+            this.physicsEngines[z].addBody(element);
+        }
 
         return this;
     }
