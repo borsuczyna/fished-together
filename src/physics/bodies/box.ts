@@ -20,7 +20,10 @@ export default class Box extends Body {
     }
 
     override draw(render: Render, wireframe: boolean = false) {
-        render.drawRectangle3D(this.position.add(-this.size.x/2, this.size.y/2, 0), this.size, this.color, undefined, this.angle);
+        let [position, size] = [this.position.add(-this.size.x/2, this.size.y/2, 0), this.size];
+
+        if(this.material) this.material.draw(render, position, size, this.angle);
+        else render.drawRectangle3D(position, size, this.color, undefined, this.angle);
 
         if(wireframe) {
             for(let vertice of this.body.vertices) {
