@@ -27,9 +27,11 @@ function update() {
     requestAnimationFrame(update);
     engine.update();
 
-    engine.render.drawImage(new Vector3D(0, 0, 0), new Size(0, 0), '/empty.png');
-    engine.render.drawImage3DWithNormal(new Vector3D(-512, 512, 0), new Size(1024, 1024), '/gun.png', '/gun-normal.png', undefined, undefined, performance.now()/10);
-    engine.render.drawRectangle3D(new Vector3D(-250, 0, 0), new Size(500, 20), new Color(255, 0, 255));
+    engine.render.drawImage3DWithNormal(new Vector3D(-512, 512, 4), new Size(1024, 1024), '/gun.png', '/gun-normal.png');
+    engine.render.drawImage3DWithNormal(new Vector3D(-1024, 512, 3), new Size(1024, 1024), '/gun.png', '/gun-normal.png');
+    engine.render.drawImage3DWithNormal(new Vector3D(-2048, 512, 2), new Size(1024, 1024), '/gun.png', '/gun-normal.png');
+    engine.render.drawRectangle3D(new Vector3D(-250, 0, 0), new Size(500, 20), new Color(255, 255, 255));
+    engine.render.drawRectangle3D(new Vector3D(-250, 0, 2), new Size(500, 20), new Color(255, 0, 0));
 
     light.setPosition(new Vector3D(engine.cursor.position.x, engine.cursor.position.y, 0));
     engine.render.setLights([light]);

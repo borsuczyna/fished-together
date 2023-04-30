@@ -161,7 +161,7 @@ export default class Render {
         let worldPosition: Vector3D = position;
         let worldSize: Vector2D = size;
         position = this.getScreenFromWorldPosition(position);
-        size = this.getDimensions(size);
+        size = this.getDimensions(size, position.z);
 
         let texture: TextureInfo = this.cache.getTextureFromCache(url);
 
@@ -214,7 +214,7 @@ export default class Render {
         let worldPosition: Vector3D = position;
         let worldSize: Vector2D = size;
         position = this.getScreenFromWorldPosition(position);
-        size = this.getDimensions(size);
+        size = this.getDimensions(size, position.z);
 
         let matrix = m4.orthographic(0, this.canvas.width, this.canvas.height, 0, -100, 100);
         matrix = m4.translate(matrix, position.x, position.y, position.z);
@@ -278,7 +278,7 @@ export default class Render {
         let worldPosition: Vector3D = position;
         let worldSize: Vector2D = size;
         position = this.getScreenFromWorldPosition(position);
-        size = this.getDimensions(size);
+        size = this.getDimensions(size, position.z);
         
         let texture: TextureInfo = this.cache.getTextureFromCache(url);
         let normalTexture: TextureInfo = this.cache.getTextureFromCache(normal);
@@ -353,7 +353,7 @@ export default class Render {
         let worldPosition: Vector3D = position;
         let worldSize: Vector2D = size;
         position = this.getScreenFromWorldPosition(position);
-        size = this.getDimensions(size);
+        size = this.getDimensions(size, position.z);
 
         let texture: TextureInfo = this.cache.getTextureFromCache(url);
 
@@ -419,7 +419,7 @@ export default class Render {
         let worldPosition: Vector3D = position;
         let worldSize: Vector2D = size;
         position = this.getScreenFromWorldPosition(position);
-        size = this.getDimensions(size);
+        size = this.getDimensions(size, position.z);
 
         let matrix = m4.orthographic(0, this.canvas.width, this.canvas.height, 0, -100, 100);
         matrix = m4.translate(matrix, position.x, position.y, position.z);
@@ -550,6 +550,8 @@ export default class Render {
         this.context.bindBuffer(this.context.ARRAY_BUFFER, this.buffers.texCoord);
         this.context.enableVertexAttribArray(this.shader.texcoordLocation);
         this.context.vertexAttribPointer(this.shader.texcoordLocation, 2, this.context.FLOAT, false, 0, 0);
+
+        this.drawCalls = this.drawCalls.sort((a, b) => (b.worldPosition?.z || 0) - (a.worldPosition?.z || 0));
 
         for (let drawCall of this.drawCalls) {
             if(drawCall.texCoords) {

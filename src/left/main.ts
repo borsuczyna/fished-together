@@ -2,6 +2,7 @@ import Cursor from "../controls/cursor";
 import Keyboard from "../controls/keyboard";
 import Camera from "../render/camera/camera";
 import Render from "../render/render";
+import { Size, Vector3D } from "../utils/position";
 
 declare const webglUtils: {
     [key: string]: any
@@ -40,6 +41,11 @@ export default class Left {
     update(): this {
         this.camera.update();
         this.render.clear();
+
+        // draw 2 empty images
+        this.render.drawImage(new Vector3D(0, 0, 0), new Size(0, 0), '/empty.png');
+        this.render.drawImage(new Vector3D(0, 0, 0), new Size(0, 0), '/empty.png');
+
         this.render.drawArrays();
 
         return this;
