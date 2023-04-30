@@ -29,6 +29,7 @@ PSInput vertexShaderFunction(VSInput VS) {
 
     PS.ScreenCoord.xy = (PS.Position.xy+1.0)/2.0;
     PS.ScreenCoord.y = 1.0-PS.ScreenCoord.y;
+    PS.ScreenCoord.z = VS.WorldPos.z;
 
     PS.Rotation = -VS.Rotation;
 

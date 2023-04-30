@@ -38,6 +38,10 @@ float aspectDistance2D(vec2 position0, vec2 position1) {
 vec4 applyWorldLight(vec4 color, vec4 screenCoord, vec2 normal, vec3 lightPosition, vec4 lightColor, float lightSize) {
     float fPower = 1.0-aspectDistance2D(screenCoord.xy, lightPosition.xy/screenSize.xy)/(lightSize/screenSize.x);
     float fNormalPower = 1.0-aspectDistance2D(screenCoord.xy, lightPosition.xy/screenSize.xy)/(lightSize/screenSize.x*2.0);
+    float depthPower = max(1.0-(abs(screenCoord.z - lightPosition.z)/4.0), .0);
+    fPower *= depthPower;
+    fNormalPower *= depthPower;
+
     vec2 dir = (lightPosition.xy/screenSize.xy) - screenCoord.xy;
     dir = normalize(dir);
     float dotValue = dot(normal.xy, dir.xy);
