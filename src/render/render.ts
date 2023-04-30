@@ -191,7 +191,8 @@ export default class Render {
         url: string | [string, 'wrap' | 'clamp'],
         normal: string | [string, 'wrap' | 'clamp'],
         shader: Shader = this.shader,
-        color: Color | Color[] = Color.White()
+        color: Color | Color[] = Color.White(),
+        rotation: number = 0
     ) {
         let worldPosition: Vector3D = position;
         let worldSize: Vector2D = size;
