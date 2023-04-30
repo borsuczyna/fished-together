@@ -54,6 +54,7 @@ interface DrawCall {
     texCoords?: number[];
     rotation: number;
     rotationCenter: Vector2D;
+    size: Size;
 };
 
 export default class Render {
@@ -104,6 +105,14 @@ export default class Render {
         this.context.bufferData(this.context.ARRAY_BUFFER, new Float32Array(defaultBuffers.texCoords), this.context.STATIC_DRAW);
     }
 
+    private rotateMatrixOnPoint(matrix: any, rotation: number, rotationCenter: Vector2D, size: Size) {
+        let rotationMatrix = m4.zRotate(m4.identity(), radians(rotation));
+        matrix = m4.translate(matrix, rotationCenter.x * size.x, rotationCenter.y * size.y, 0);
+        matrix = m4.multiply(matrix, rotationMatrix);
+        matrix = m4.translate(matrix, -rotationCenter.x * size.x, -rotationCenter.y * size.y, 0);
+        return matrix;
+    }
+
     setLights(lights: Light[]): this {
         this.lights = lights;
         return this;
@@ -135,6 +144,7 @@ export default class Render {
 
         let matrix = m4.orthographic(0, this.canvas.width, this.canvas.height, 0, -100, 100);
         matrix = m4.translate(matrix, position.x, position.y, position.z);
+        matrix = this.rotateMatrixOnPoint(matrix, rotation, rotationCenter, size);
         matrix = m4.scale(matrix, size.x, size.y, 1);
 
         this.drawCalls.push({
@@ -145,7 +155,8 @@ export default class Render {
             uw: 1,
             uh: 1,
             rotation,
-            rotationCenter
+            rotationCenter,
+            size
         });
     }
 
@@ -167,6 +178,7 @@ export default class Render {
 
         let matrix = m4.orthographic(0, this.canvas.width, this.canvas.height, 0, -100, 100);
         matrix = m4.translate(matrix, position.x, position.y, position.z);
+        matrix = this.rotateMatrixOnPoint(matrix, rotation, rotationCenter, size);
         matrix = m4.scale(matrix, size.x, size.y, 1);
 
         this.drawCalls.push({
@@ -179,7 +191,8 @@ export default class Render {
             worldPosition,
             worldSize,
             rotation,
-            rotationCenter
+            rotationCenter,
+            size
         });
     }
 
@@ -187,10 +200,13 @@ export default class Render {
         position: Vector3D,
         size: Size,
         color: Color,
-        shader: Shader = this.shaders.rectangle
+        shader: Shader = this.shaders.rectangle,
+        rotation: number = 0,
+        rotationCenter: Vector2D = new Vector2D(0.5, 0.5)
     ) {
         let matrix = m4.orthographic(0, this.canvas.width, this.canvas.height, 0, -100, 100);
         matrix = m4.translate(matrix, position.x, position.y, position.z);
+        matrix = this.rotateMatrixOnPoint(matrix, rotation, rotationCenter, size);
         matrix = m4.scale(matrix, size.x, size.y, 1);
 
         this.drawCalls.push({
@@ -200,8 +216,9 @@ export default class Render {
             color,
             uw: 1,
             uh: 1,
-            rotation: 0,
-            rotationCenter: new Vector2D(0, 0)
+            rotation,
+            rotationCenter,
+            size
         })
     }
 
@@ -209,7 +226,9 @@ export default class Render {
         position: Vector3D,
         size: Size,
         color: Color,
-        shader: Shader = this.shaders.rectangle
+        shader: Shader = this.shaders.rectangle,
+        rotation: number = 0,
+        rotationCenter: Vector2D = new Vector2D(0.5, 0.5)
     ) {
         let worldPosition: Vector3D = position;
         let worldSize: Vector2D = size;
@@ -218,6 +237,7 @@ export default class Render {
 
         let matrix = m4.orthographic(0, this.canvas.width, this.canvas.height, 0, -100, 100);
         matrix = m4.translate(matrix, position.x, position.y, position.z);
+        matrix = this.rotateMatrixOnPoint(matrix, rotation, rotationCenter, size);
         matrix = m4.scale(matrix, size.x, size.y, 1);
         
         this.drawCalls.push({
@@ -229,8 +249,9 @@ export default class Render {
             uh: 1,
             worldPosition,
             worldSize,
-            rotation: 0,
-            rotationCenter: new Vector2D(0, 0)
+            rotation,
+            rotationCenter,
+            size
         })
     }
     
@@ -250,6 +271,7 @@ export default class Render {
 
         let matrix = m4.orthographic(0, this.canvas.width, this.canvas.height, 0, -100, 100);
         matrix = m4.translate(matrix, position.x, position.y, position.z);
+        matrix = this.rotateMatrixOnPoint(matrix, rotation, rotationCenter, size);
         matrix = m4.scale(matrix, size.x, size.y, 1);
 
         this.drawCalls.push({
@@ -261,7 +283,8 @@ export default class Render {
             uw: 1,
             uh: 1,
             rotation,
-            rotationCenter
+            rotationCenter,
+            size
         });
     }
 
@@ -285,6 +308,7 @@ export default class Render {
 
         let matrix = m4.orthographic(0, this.canvas.width, this.canvas.height, 0, -100, 100);
         matrix = m4.translate(matrix, position.x, position.y, position.z);
+        matrix = this.rotateMatrixOnPoint(matrix, rotation, rotationCenter, size);
         matrix = m4.scale(matrix, size.x, size.y, 1);
 
         this.drawCalls.push({
@@ -298,7 +322,8 @@ export default class Render {
             worldPosition,
             worldSize,
             rotation,
-            rotationCenter
+            rotationCenter,
+            size
         });
     }
     
@@ -316,6 +341,7 @@ export default class Render {
 
         let matrix = m4.orthographic(0, this.canvas.width, this.canvas.height, 0, -100, 100);
         matrix = m4.translate(matrix, position.x, position.y, position.z);
+        matrix = this.rotateMatrixOnPoint(matrix, rotation, rotationCenter, size);
         matrix = m4.scale(matrix, size.x, size.y, 1);
 
         [uv.z, uv.w] = [uv.z + uv.x, uv.w + uv.y];
@@ -336,7 +362,8 @@ export default class Render {
                 uv.z, uv.w,
             ],
             rotation,
-            rotationCenter
+            rotationCenter,
+            size
         });
     }
 
@@ -359,6 +386,7 @@ export default class Render {
 
         let matrix = m4.orthographic(0, this.canvas.width, this.canvas.height, 0, -100, 100);
         matrix = m4.translate(matrix, position.x, position.y, position.z);
+        matrix = this.rotateMatrixOnPoint(matrix, rotation, rotationCenter, size);
         matrix = m4.scale(matrix, size.x, size.y, 1);
 
         [uv.z, uv.w] = [uv.z + uv.x, uv.w + uv.y];
@@ -381,7 +409,8 @@ export default class Render {
             worldPosition,
             worldSize,
             rotation,
-            rotationCenter
+            rotationCenter,
+            size
         });
     }
 
@@ -395,6 +424,7 @@ export default class Render {
     ) {
         let matrix = m4.orthographic(0, this.canvas.width, this.canvas.height, 0, -100, 100);
         matrix = m4.translate(matrix, position.x, position.y, position.z);
+        matrix = this.rotateMatrixOnPoint(matrix, rotation, rotationCenter, size);
         matrix = m4.scale(matrix, size.x, size.y, 1);
 
         this.drawCalls.push({
@@ -404,7 +434,8 @@ export default class Render {
             uw: 1,
             uh: 1,
             rotation,
-            rotationCenter
+            rotationCenter,
+            size
         });
     }
 
@@ -423,6 +454,7 @@ export default class Render {
 
         let matrix = m4.orthographic(0, this.canvas.width, this.canvas.height, 0, -100, 100);
         matrix = m4.translate(matrix, position.x, position.y, position.z);
+        matrix = this.rotateMatrixOnPoint(matrix, rotation, rotationCenter, size);
         matrix = m4.scale(matrix, size.x, size.y, 1);
 
         this.drawCalls.push({
@@ -434,7 +466,8 @@ export default class Render {
             rotation,
             rotationCenter,
             worldPosition,
-            worldSize
+            worldSize,
+            size
         });
     }
 
@@ -488,6 +521,10 @@ export default class Render {
     private updateShaderRotation(shader: Shader, rotation: number, rotationCenter: Vector2D) {
         shader.setValue('internal_rotation', radians(rotation), 'float');
         shader.setValue('internal_rotationCenter', rotationCenter.array(), 'vec2');
+    }
+
+    private updateShaderAspectRatio(shader: Shader, width: number, height: number) {
+        shader.setValue('internal_aspect', width / height, 'float');
     }
 
     private updateShaderDiffuse(shader: Shader, color: Color | Color[]) {
@@ -576,6 +613,7 @@ export default class Render {
             this.context.useProgram(drawCall.shader.program);
             this.updateDefaultShaderValues(drawCall.shader);
             this.updateShaderRotation(drawCall.shader, drawCall.rotation, drawCall.rotationCenter);
+            this.updateShaderAspectRatio(drawCall.shader, drawCall.size.x, drawCall.size.y);
             this.updateShaderDiffuse(drawCall.shader, drawCall.color);
             this.updateShaderUV(drawCall.shader, drawCall.uw, drawCall.uh);
             this.updateShaderLights(drawCall.shader, this.lights);

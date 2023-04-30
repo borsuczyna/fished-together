@@ -1,3 +1,5 @@
+#define PI 3.1415926538
+
 precision highp float;
 uniform vec2 internal_inTexCoord;
 

@@ -3,6 +3,7 @@ struct VSInput {
     vec4 Position : POSITION0;
     float Rotation : ROTATION0;
     vec2 RotationCenter : ROTATION1;
+    float Aspect : ASPECT;
     vec3 WorldPos : WORLDPOS;
     vec2 WorldSize : WORLDSIZE;
     mat4 Matrix : MATRIX;
@@ -20,9 +21,6 @@ struct PSInput {
 
 PSInput vertexShaderFunction(VSInput VS) {
     PSInput PS;
-
-    mat2 rotationMatrix = mat2(cos(VS.Rotation), -sin(VS.Rotation), sin(VS.Rotation), cos(VS.Rotation));
-    VS.Position.xy = rotationMatrix * (VS.Position.xy - VS.RotationCenter) + VS.RotationCenter;
 
     PS.TexCoord = VS.TexCoord;
     PS.Position = VS.Matrix * VS.Position;

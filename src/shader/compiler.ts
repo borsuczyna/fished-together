@@ -154,6 +154,7 @@ export function compileShader(code: string = defaultShader): [string, string] {
         'POSITION0': 'internal_position',
         'ROTATION0': 'internal_rotation',
         'ROTATION1': 'internal_rotationCenter',
+        'ASPECT': 'internal_aspect',
         'WORLDPOS': 'internal_worldPosition',
         'WORLDSIZE': 'internal_worldSize',
         'DIFFUSE0': 'internal_diffuse',
