@@ -1,6 +1,5 @@
 # **Left Engine**
 ## Left
-___
 ## Methods
 ```ts
 let engine = new Left(canvas: HTMLCanvasElement);
@@ -10,7 +9,6 @@ engine.update();
 ```
 
 ## **Render**
-___
 ## Methods
 ```ts
 let render = new Render(context: WebGLRenderingContext, parent: Left);
@@ -59,7 +57,6 @@ render.drawArrays();
 ```
 
 ## **Shaders**
-___
 ## Example
 ```ts
 let shaderCode = `
