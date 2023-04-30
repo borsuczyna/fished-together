@@ -3,6 +3,7 @@ import Keyboard from "../controls/keyboard";
 import Camera from "../render/camera/camera";
 import Render from "../render/render";
 import { Size, Vector3D } from "../utils/position";
+import World from "../world/main";
 
 declare const webglUtils: {
     [key: string]: any
@@ -16,6 +17,7 @@ export default class Left {
     canvas: HTMLCanvasElement;
     context: WebGLRenderingContext;
     render: Render;
+    world: World = new World();
     camera: Camera = new Camera(this);
     
     // Controllers

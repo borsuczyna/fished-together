@@ -17,9 +17,6 @@ struct PSInput {
 PSInput vertexShaderFunction(VSInput VS) {
     PSInput PS;
 
-    // mat2 rotationMatrix = mat2(cos(VS.Rotation), -sin(VS.Rotation), sin(VS.Rotation), cos(VS.Rotation));
-    // VS.Position.xy = rotationMatrix * (VS.Position.xy - VS.RotationCenter) + VS.RotationCenter;
-
     PS.Position = VS.Matrix * VS.Position;
 
     PS.ScreenCoord.xy = (PS.Position.xy+1.0)/2.0;

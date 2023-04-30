@@ -119,3 +119,6 @@ vec4 applyWorldLights(vec4 color, vec2 normal, vec4 screenCoord, bool onlySunLig
 // rotates normals
 vec2 rotateNormals(vec2 normals, float rotation);
 ```
+
+# Used libraries
+matter.js (liabru) https://brm.io/matter-js/
