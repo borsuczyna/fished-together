@@ -29,6 +29,7 @@ function update() {
 
     engine.render.drawImage(new Vector3D(0, 0, 0), new Size(0, 0), '/empty.png');
     engine.render.drawImage3DWithNormal(new Vector3D(-512, 512, 0), new Size(1024, 1024), '/gun.png', '/gun-normal.png', undefined, undefined, performance.now()/10);
+    engine.render.drawRectangle3D(new Vector3D(-250, 0, 0), new Size(500, 20), new Color(255, 0, 255));
 
     light.setPosition(new Vector3D(engine.cursor.position.x, engine.cursor.position.y, 0));
     engine.render.setLights([light]);

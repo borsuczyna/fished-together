@@ -7,6 +7,8 @@ import Cache, { TextureInfo } from "./cache";
 import Color from "./color";
 import Light from "./light";
 
+import rectangleShader from '../shader/shaders/rectangle.glsl?raw';
+
 interface Buffers {
     position: WebGLBuffer;
     texCoord: WebGLBuffer;
@@ -56,22 +58,35 @@ interface DrawCall {
 
 export default class Render {
     private drawCalls: DrawCall[] = [];
-    parent: Left;
-    context: WebGLRenderingContext;
-    cache: Cache;
-    shader: Shader;
-    buffers: Buffers;
+    private parent: Left;
+    private canvas: HTMLCanvasElement | OffscreenCanvas;
+    private context: WebGLRenderingContext;
+    private cache: Cache;
+    private shader: Shader;
+    private buffers: Buffers;
+
+    shaders: {
+        [key: string]: Shader
+    } = {};
+
+    // lights
     lightDirection: Vector2D = new Vector2D();
     lightColor: Color = new Color();
     lights: Light[] = [];
+    
+    // settings
     normalPower: number = 1;
 
     constructor(context: WebGLRenderingContext, parent: Left) {
         this.parent = parent;
+        this.canvas = context.canvas;
         this.context = context;
 
         this.cache = new Cache(context);
         this.shader = new Shader(context);
+
+        // default shaders
+        this.shaders.rectangle = new Shader(context, rectangleShader);
 
         //  Buffers
         let position = this.context.createBuffer();
@@ -89,14 +104,15 @@ export default class Render {
         this.context.bufferData(this.context.ARRAY_BUFFER, new Float32Array(defaultBuffers.texCoords), this.context.STATIC_DRAW);
     }
 
-    setLights(lights: Light[]) {
+    setLights(lights: Light[]): this {
         this.lights = lights;
+        return this;
     }
 
     clear() {
-        let canvas: HTMLCanvasElement | OffscreenCanvas = this.context.canvas;
+        let canvas: HTMLCanvasElement | OffscreenCanvas = this.canvas;
 
-        webglUtils.resizeCanvasToDisplaySize(this.context.canvas);
+        webglUtils.resizeCanvasToDisplaySize(this.canvas);
     
         this.context.viewport(0, 0, canvas.width, canvas.height);
         this.context.clear(this.context.COLOR_BUFFER_BIT);
@@ -116,9 +132,8 @@ export default class Render {
         rotationCenter: Vector2D = new Vector2D(0.5, 0.5)
     ) {
         let texture: TextureInfo = this.cache.getTextureFromCache(url);
-        let canvas: HTMLCanvasElement | OffscreenCanvas = this.context.canvas;
 
-        let matrix = m4.orthographic(0, canvas.width, canvas.height, 0, -100, 100);
+        let matrix = m4.orthographic(0, this.canvas.width, this.canvas.height, 0, -100, 100);
         matrix = m4.translate(matrix, position.x, position.y, position.z);
         matrix = m4.scale(matrix, size.x, size.y, 1);
 
@@ -149,9 +164,8 @@ export default class Render {
         size = this.getDimensions(size);
 
         let texture: TextureInfo = this.cache.getTextureFromCache(url);
-        let canvas: HTMLCanvasElement | OffscreenCanvas = this.context.canvas;
 
-        let matrix = m4.orthographic(0, canvas.width, canvas.height, 0, -100, 100);
+        let matrix = m4.orthographic(0, this.canvas.width, this.canvas.height, 0, -100, 100);
         matrix = m4.translate(matrix, position.x, position.y, position.z);
         matrix = m4.scale(matrix, size.x, size.y, 1);
 
@@ -162,12 +176,64 @@ export default class Render {
             color,
             uw: 1,
             uh: 1,
-            worldPosition: worldPosition,
-            worldSize: worldSize,
+            worldPosition,
+            worldSize,
             rotation,
             rotationCenter
         });
     }
+
+    drawRectangle(
+        position: Vector3D,
+        size: Size,
+        color: Color,
+        shader: Shader = this.shaders.rectangle
+    ) {
+        let matrix = m4.orthographic(0, this.canvas.width, this.canvas.height, 0, -100, 100);
+        matrix = m4.translate(matrix, position.x, position.y, position.z);
+        matrix = m4.scale(matrix, size.x, size.y, 1);
+
+        this.drawCalls.push({
+            texture: this.cache.getEmptyTexture(),
+            matrix,
+            shader,
+            color,
+            uw: 1,
+            uh: 1,
+            rotation: 0,
+            rotationCenter: new Vector2D(0, 0)
+        })
+    }
+
+    drawRectangle3D(
+        position: Vector3D,
+        size: Size,
+        color: Color,
+        shader: Shader = this.shaders.rectangle
+    ) {
+        let worldPosition: Vector3D = position;
+        let worldSize: Vector2D = size;
+        position = this.getScreenFromWorldPosition(position);
+        size = this.getDimensions(size);
+
+        let matrix = m4.orthographic(0, this.canvas.width, this.canvas.height, 0, -100, 100);
+        matrix = m4.translate(matrix, position.x, position.y, position.z);
+        matrix = m4.scale(matrix, size.x, size.y, 1);
+        
+        this.drawCalls.push({
+            texture: this.cache.getEmptyTexture(),
+            matrix,
+            shader,
+            color,
+            uw: 1,
+            uh: 1,
+            worldPosition,
+            worldSize,
+            rotation: 0,
+            rotationCenter: new Vector2D(0, 0)
+        })
+    }
+    
 
     drawImageWithNormal(
         position: Vector3D,
@@ -181,9 +247,8 @@ export default class Render {
     ) {
         let texture: TextureInfo = this.cache.getTextureFromCache(url);
         let normalTexture: TextureInfo = this.cache.getTextureFromCache(normal);
-        let canvas: HTMLCanvasElement | OffscreenCanvas = this.context.canvas;
 
-        let matrix = m4.orthographic(0, canvas.width, canvas.height, 0, -100, 100);
+        let matrix = m4.orthographic(0, this.canvas.width, this.canvas.height, 0, -100, 100);
         matrix = m4.translate(matrix, position.x, position.y, position.z);
         matrix = m4.scale(matrix, size.x, size.y, 1);
 
@@ -217,9 +282,8 @@ export default class Render {
         
         let texture: TextureInfo = this.cache.getTextureFromCache(url);
         let normalTexture: TextureInfo = this.cache.getTextureFromCache(normal);
-        let canvas: HTMLCanvasElement | OffscreenCanvas = this.context.canvas;
 
-        let matrix = m4.orthographic(0, canvas.width, canvas.height, 0, -100, 100);
+        let matrix = m4.orthographic(0, this.canvas.width, this.canvas.height, 0, -100, 100);
         matrix = m4.translate(matrix, position.x, position.y, position.z);
         matrix = m4.scale(matrix, size.x, size.y, 1);
 
@@ -231,8 +295,8 @@ export default class Render {
             color,
             uw: 1,
             uh: 1,
-            worldPosition: worldPosition,
-            worldSize: worldSize,
+            worldPosition,
+            worldSize,
             rotation,
             rotationCenter
         });
@@ -249,9 +313,8 @@ export default class Render {
         rotationCenter: Vector2D = new Vector2D(0.5, 0.5)
     ) {
         let texture: TextureInfo = this.cache.getTextureFromCache(url);
-        let canvas: HTMLCanvasElement | OffscreenCanvas = this.context.canvas;
 
-        let matrix = m4.orthographic(0, canvas.width, canvas.height, 0, -100, 100);
+        let matrix = m4.orthographic(0, this.canvas.width, this.canvas.height, 0, -100, 100);
         matrix = m4.translate(matrix, position.x, position.y, position.z);
         matrix = m4.scale(matrix, size.x, size.y, 1);
 
@@ -277,6 +340,51 @@ export default class Render {
         });
     }
 
+    drawImageSection3D(
+        position: Vector3D,
+        size: Size,
+        uv: Vector4D,
+        url: string | [string, 'wrap' | 'clamp'],
+        shader: Shader = this.shader,
+        color: Color | Color[] = Color.White(),
+        rotation: number = 0,
+        rotationCenter: Vector2D = new Vector2D(0.5, 0.5)
+    ) {
+        let worldPosition: Vector3D = position;
+        let worldSize: Vector2D = size;
+        position = this.getScreenFromWorldPosition(position);
+        size = this.getDimensions(size);
+
+        let texture: TextureInfo = this.cache.getTextureFromCache(url);
+
+        let matrix = m4.orthographic(0, this.canvas.width, this.canvas.height, 0, -100, 100);
+        matrix = m4.translate(matrix, position.x, position.y, position.z);
+        matrix = m4.scale(matrix, size.x, size.y, 1);
+
+        [uv.z, uv.w] = [uv.z + uv.x, uv.w + uv.y];
+
+        this.drawCalls.push({
+            texture,
+            matrix,
+            shader,
+            color,
+            uw: uv.z - uv.x,
+            uh: uv.w - uv.y,
+            texCoords: [
+                uv.x, uv.y,
+                uv.x, uv.w,
+                uv.z, uv.y,
+                uv.z, uv.y,
+                uv.x, uv.w,
+                uv.z, uv.w,
+            ],
+            worldPosition,
+            worldSize,
+            rotation,
+            rotationCenter
+        });
+    }
+
     drawShader(
         position: Vector3D,
         size: Size,
@@ -285,9 +393,7 @@ export default class Render {
         rotation: number = 0,
         rotationCenter: Vector2D = new Vector2D(0.5, 0.5)
     ) {
-        let canvas: HTMLCanvasElement | OffscreenCanvas = this.context.canvas;
-
-        let matrix = m4.orthographic(0, canvas.width, canvas.height, 0, -100, 100);
+        let matrix = m4.orthographic(0, this.canvas.width, this.canvas.height, 0, -100, 100);
         matrix = m4.translate(matrix, position.x, position.y, position.z);
         matrix = m4.scale(matrix, size.x, size.y, 1);
 
@@ -302,16 +408,46 @@ export default class Render {
         });
     }
 
+    drawShader3D(
+        position: Vector3D,
+        size: Size,
+        shader: Shader = this.shader,
+        color: Color | Color[] = Color.White(),
+        rotation: number = 0,
+        rotationCenter: Vector2D = new Vector2D(0.5, 0.5)
+    ) {
+        let worldPosition: Vector3D = position;
+        let worldSize: Vector2D = size;
+        position = this.getScreenFromWorldPosition(position);
+        size = this.getDimensions(size);
+
+        let matrix = m4.orthographic(0, this.canvas.width, this.canvas.height, 0, -100, 100);
+        matrix = m4.translate(matrix, position.x, position.y, position.z);
+        matrix = m4.scale(matrix, size.x, size.y, 1);
+
+        this.drawCalls.push({
+            matrix,
+            shader,
+            color,
+            uw: 1,
+            uh: 1,
+            rotation,
+            rotationCenter,
+            worldPosition,
+            worldSize
+        });
+    }
+
     getScreenFromWorldPosition(position: Vector3D = new Vector3D()): Vector3D {
         let zMult: number = 1/((position.z/2) + 1);
 
         let validPosition: Vector2D = new Vector2D(
-            this.context.canvas.width / 2 + (position.x * this.parent.camera.zoom) - (this.parent.camera.position.x * this.parent.camera.zoom),
-            this.context.canvas.height / 2 - (position.y * this.parent.camera.zoom) + (this.parent.camera.position.y * this.parent.camera.zoom)
+            this.canvas.width / 2 + (position.x * this.parent.camera.zoom) - (this.parent.camera.position.x * this.parent.camera.zoom),
+            this.canvas.height / 2 - (position.y * this.parent.camera.zoom) + (this.parent.camera.position.y * this.parent.camera.zoom)
         );
 
-        let cx: number = this.context.canvas.width/2;
-        let cy: number = this.context.canvas.height/2;
+        let cx: number = this.canvas.width/2;
+        let cy: number = this.canvas.height/2;
 
         return new Vector3D(
             Math.floor(cx + (validPosition.x - cx) * zMult),
@@ -324,8 +460,8 @@ export default class Render {
         let zMult: number = 1/((depth/2) + 1);
 
         let validPosition: Vector2D = new Vector2D(
-            (position.x - (this.context.canvas.width / 2)) / zMult + (this.parent.camera.position.x * this.parent.camera.zoom),
-            (-position.y + (this.context.canvas.height / 2)) / zMult + (this.parent.camera.position.y * this.parent.camera.zoom)
+            (position.x - (this.canvas.width / 2)) / zMult + (this.parent.camera.position.x * this.parent.camera.zoom),
+            (-position.y + (this.canvas.height / 2)) / zMult + (this.parent.camera.position.y * this.parent.camera.zoom)
         );
 
         return new Vector3D(
@@ -345,7 +481,7 @@ export default class Render {
         shader.setValue('time', performance.now(), 'float');
         shader.setValue('directionalLightDir', this.lightDirection.array(), 'vec2');
         shader.setValue('directionalLightColor', this.lightColor.normalizedArray(), 'vec4');
-        shader.setValue('screenSize', [this.context.canvas.width, this.context.canvas.height], 'vec2');
+        shader.setValue('screenSize', [this.canvas.width, this.canvas.height], 'vec2');
         shader.setValue('normalPower', this.normalPower, 'float');
     }
 

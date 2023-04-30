@@ -39,7 +39,7 @@ vec4 pixelShaderFunction(PSInput PS) {
     vec4 color = texture2D(texture, vec2(PS.TexCoord.x, PS.TexCoord.y));
 
     // rotate normal
-    PS.Normal = mat2(cos(PS.Rotation), sin(PS.Rotation), -sin(PS.Rotation), cos(PS.Rotation)) * PS.Normal;
+    PS.Normal = rotateNormals(PS.Normal, PS.Rotation);
 
     color *= PS.Diffuse;
     color.rgb *= color.a;

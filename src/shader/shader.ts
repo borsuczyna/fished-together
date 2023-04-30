@@ -9,6 +9,8 @@ declare const m4: {
     [key: string]: any
 };
 
+type ShaderVariableType = 'float' | 'matrix' | 'texture' | 'int' | 'vec2' | 'vec3' | 'vec4' | 'bool';
+
 export default class Shader {
     context: WebGLRenderingContext;
     program: WebGLProgram;
@@ -30,10 +32,10 @@ export default class Shader {
         this.normalLocation = context.getUniformLocation(this.program, "normalTexture") as WebGLUniformLocation;
     }
 
-    setValue(key: string, value: any, type: 'float' | 'matrix' | 'texture' | 'int' | 'vec2' | 'vec3' | 'vec4' | 'bool') {
-        const location = this.locationCache[key] || this.context.getUniformLocation(this.program, key);
-        if (!location) return;
-        if(!this.locationCache[key]) this.locationCache[key] = location;
+    setValue(variable: string, value: any, type: ShaderVariableType): this {
+        const location = this.locationCache[variable] || this.context.getUniformLocation(this.program, variable);
+        if (!location) return this;
+        if(!this.locationCache[variable]) this.locationCache[variable] = location;
         this.context.useProgram(this.program);
         switch (type) {
             case 'float':
@@ -63,5 +65,7 @@ export default class Shader {
                 this.context.uniform1i(location, value ? 1 : 0);
                 break;
         }
+
+        return this;
     }
 }

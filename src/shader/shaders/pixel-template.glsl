@@ -71,6 +71,10 @@ vec4 applyWorldLights(vec4 color, vec2 normal, vec4 screenCoord, bool onlySunLig
     return color;
 }
 
+vec2 rotateNormals(vec2 normals, float rotation) {
+    return mat2(cos(rotation), sin(rotation), -sin(rotation), cos(rotation)) * normals;
+}
+
 <PixelFunctions>
 
 <PixelShaderCode>
