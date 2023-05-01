@@ -4,7 +4,7 @@ import Color from "../../render/color";
 import { Size, Vector3D } from "../../utils/position";
 import LeftRender from "../../render/render";
 
-export default class Circle extends Body {
+export default class Sphere extends Body {
     color: Color = new Color(255, 255, 255);
     radius: number;
     body: Matter.Body;

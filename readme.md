@@ -58,6 +58,61 @@ render.getDimensions(dimensions: Size, z: number): Size;
 render.drawArrays();
 ```
 
+## **Materials**
+```ts
+let material = new Material(url: string, normal?: string);
+material.offset = new Vector2(.5, .5);
+material.scale = new Size(1, 1);
+material.draw(render: LeftRender, position: Vector3D, size: Size, rotation: number, rotationCenter: Vector2D);
+```
+
+## **World**
+## Main
+```ts
+let world = engine.world;
+
+// gravity
+world.gravity = new Vector2D(x, y);
+world.setGravity(new Vector2D(x, y));
+
+// elements
+bodies: LeftBody[] = world.bodies;
+constraints: LeftConstraint[] = world.constraints;
+elements: LeftElement[] = world.elements;
+
+// adding/removing elements
+world.add(object);
+world.add([object, light, constraint]);
+world.remove(object);
+world.remove([object, light, constraint]);
+```
+
+## Physics Elements
+```ts
+// elements
+let box = new Box(position: Vector3D, size: Size);
+let sphere = new Sphere(position: Vector3D, radius: number);
+
+// material
+element.material = Material;
+
+// volumetric light collision
+element.volumetricLight = boolean;
+element.barrierData = {
+    type: BarrierType;
+    size: Size;
+    offset: Vector2D;
+};
+element.barrier = Barrier;
+
+// variables and methods
+element.position: Vector3D;
+element.angle: number;
+element.width: number;
+element.height: number;
+element.getOffset(position: Vector3D): Vector3D;
+```
+
 ## **Shaders**
 ## Example
 ```ts
@@ -87,6 +142,14 @@ vec4 pixelShaderFunction(PSInput PS) {
 let shader: Shader = new Shader(game.context, shaderCode);
 ```
 
+## Defining fucntions
+To define function you have to add :PIXEL or :VERTEX at the end of it's name
+```glsl
+vec4 someColorFunction:PIXEL(vec4 one, vec4 two) {
+    return mix(one, two, .5);
+}
+```
+
 ## Methods
 ```ts
 type ShaderVariableType = 'float' | 'matrix' | 'texture' | 'int' | 'vec2' | 'vec3' | 'vec4' | 'bool';
@@ -104,7 +167,7 @@ ASPECT - Aspect Ratio [float]
 WORLDPOS - World Position [vec3]
 WORLDSIZE - World Size [vec2]
 DIFFUSE0 - Diffuse Color [vec4]
-MATRIX - Matrix [mat4],
+MATRIX - Matrix [mat4]
 ```
 
 ## Pixel Shader Functions

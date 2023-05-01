@@ -1,10 +1,8 @@
-import { Bodies } from 'matter-js';
 import Left from './left/main';
 import Material from './material/main';
 import Box from './physics/bodies/box';
-import Circle from './physics/bodies/circle';
+import Sphere from './physics/bodies/sphere';
 import LeftConstraint from './physics/constraint/contraint';
-import Barrier from './render/barrier';
 import FreeCam from './render/camera/freecam';
 
 let player: HTMLCanvasElement = document.getElementById('player') as HTMLCanvasElement;
@@ -43,7 +41,7 @@ let box3 = new Box(new Vector3D(-60, 460, 0), new Size(80, 40));
 let box4 = new Box(new Vector3D(-160, 560, 0), new Size(80, 80));
 box2.barrierData.size = new Size(70, 10);
 box2.barrierData.offset = new Vector2D(-.5 + (5/80), .2);
-let circle = new Circle(new Vector3D(-350, 150, 0), 80);
+let sphere = new Sphere(new Vector3D(-350, 150, 0), 80);
 engine.world.gravity = new Vector2D(0, -0.0002);
 
 box1.material = new Material('box.png', 'box-normal.png');
@@ -51,7 +49,7 @@ box2.material = new Material('lamp.png');
 box3.material = new Material('radio.png');
 box3.material.offset = new Vector2D(0, -.5);
 box3.material.scale = new Size(1, 1.4);
-circle.color = new Color(100, 100, 255);
+sphere.color = new Color(100, 100, 255);
 
 let c = new Vector2D(-70, 550);
 let constraint = new LeftConstraint(c, {
@@ -66,7 +64,7 @@ let constraint2 = new LeftConstraint({
     position: new Vector2D(0, -40)
 });
 
-engine.world.add([ground, box1, box2, box3, box4, circle, constraint, constraint2]);
+engine.world.add([ground, box1, box2, box3, box4, sphere, constraint, constraint2]);
 
 function update() {
     requestAnimationFrame(update);

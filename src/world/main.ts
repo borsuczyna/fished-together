@@ -94,10 +94,4 @@ export default class LeftWorld {
 
         return this;
     }
-
-    // createConstraint(element: Body, point: Vector2D) {
-    //     let z = element.position.z;
-    //     if(!this.physicsEngines[z]) this.createPhysicsEngine(z);
-    //     return this.physicsEngines[z].createConstraint(element, point);
-    // }
 }
