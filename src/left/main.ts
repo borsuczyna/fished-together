@@ -3,7 +3,7 @@ import Keyboard from "../controls/keyboard";
 import Camera from "../render/camera/camera";
 import Render from "../render/render";
 import { Size, Vector3D } from "../utils/position";
-import World from "../world/main";
+import LeftWorld from "../world/main";
 
 declare const webglUtils: {
     [key: string]: any
@@ -17,7 +17,7 @@ export default class Left {
     canvas: HTMLCanvasElement;
     context: WebGLRenderingContext;
     render: Render;
-    world: World;
+    world: LeftWorld;
     camera: Camera = new Camera(this);
     
     // Controllers
@@ -39,7 +39,7 @@ export default class Left {
         this.render = new Render(this.context, this);
 
         // Physics World
-        this.world = new World();
+        this.world = new LeftWorld();
 
         // Controllers
         this.cursor = new Cursor(canvas);
