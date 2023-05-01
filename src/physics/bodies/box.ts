@@ -2,9 +2,9 @@ import Body from "./body";
 
 import { Bodies } from "matter-js";
 import Color from "../../render/color";
-import { Size, Vector3D } from "../../utils/position";
+import { Size, Vector2D, Vector3D } from "../../utils/position";
 import LeftRender from "../../render/render";
-import Barrier from "../../render/barrier";
+import Barrier, { BarrierType } from "../../render/barrier";
 
 export default class Box extends Body {
     color: Color = new Color(255, 255, 255);
@@ -18,20 +18,34 @@ export default class Box extends Body {
         this.body = Bodies.rectangle(position.x, position.y, size.x, size.y, {
             isStatic
         });
-        this.barrier = new Barrier(position, size);
+
+        // barrier data
+        this.barrierData.size = size;
+        this.barrierData.type = BarrierType.Box;
+        this.barrierData.offset = new Vector2D(-.5, -.5);
+    }
+
+    get width(): number {
+        return this.size.x;
+    }
+
+    get height(): number {
+        return this.size.y;
     }
 
     override draw(render: LeftRender, wireframe: boolean = false) {
-        let [position, size] = [this.position.add(-this.size.x/2, this.size.y/2, 0), this.size];
-
-        if(this.material) this.material.draw(render, position, size, this.angle);
-        else render.drawRectangle3D(position, size, this.color, undefined, this.angle);
-
-        if(this.volumetricLight && this.barrier) {
-            render.requestBarrier(this.barrier);
-            this.barrier.position = this.getOffset(Vector3D.from(this.size).multiply(-.5));
-            this.barrier.angle = this.angle;
+        let size = this.size.clone();
+        
+        if(this.material) {
+            size = size.multiply(this.material.scale);
+            let position = this.getOffset(new Vector3D(-size.x/2, -size.y/2, 0));
+            this.material.draw(render, position, size, this.angle, new Vector2D(0, 0));
+        } else {
+            let position = this.position.add(-size.x/2, size.y/2, 0);
+            render.drawRectangle3D(position, size, this.color, undefined, this.angle);
         }
+
+        this.updateBarrier(render);
 
         if(wireframe) {
             for(let vertice of this.body.vertices) {

@@ -25,6 +25,7 @@ export default class Physics {
             y: value.y,
             scale: 1
         }
+        this.engine.timing.timeScale = .1;
     }
 
     get gravity(): Vector2D {
