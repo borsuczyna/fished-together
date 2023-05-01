@@ -1,4 +1,4 @@
-import Render from "../render/render";
+import LeftRender from "../render/render";
 import { Size, Vector2D, Vector3D } from "../utils/position";
 
 export default class Material {
@@ -10,8 +10,8 @@ export default class Material {
         this.normal = normal;
     }
 
-    draw(render: Render, position: Vector3D, size: Size, rotation: number = 0, rotationCenter: Vector2D = new Vector2D(.5, .5)) {
-        if(!this.normal) render.drawImage3D(position, size, this.url, undefined, undefined, rotation);
-        else render.drawImage3DWithNormal(position, size, this.url, this.normal, undefined, undefined, rotation);
+    draw(render: LeftRender, position: Vector3D, size: Size, rotation: number = 0, rotationCenter: Vector2D = new Vector2D(.5, .5)) {
+        if(!this.normal) render.drawImage3D(position, size, this.url, undefined, undefined, rotation, rotationCenter);
+        else render.drawImage3DWithNormal(position, size, this.url, this.normal, undefined, undefined, rotation, rotationCenter);
     }
 }

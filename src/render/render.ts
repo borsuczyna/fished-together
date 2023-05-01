@@ -58,7 +58,7 @@ interface DrawCall {
     size: Size;
 };
 
-export default class Render {
+export default class LeftRender {
     private drawCalls: DrawCall[] = [];
     private parent: Left;
     private canvas: HTMLCanvasElement | OffscreenCanvas;

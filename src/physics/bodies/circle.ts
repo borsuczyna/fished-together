@@ -2,7 +2,7 @@ import Body from "./body";
 import { Bodies } from "matter-js";
 import Color from "../../render/color";
 import { Size, Vector3D } from "../../utils/position";
-import Render from "../../render/render";
+import LeftRender from "../../render/render";
 
 export default class Circle extends Body {
     color: Color = new Color(255, 255, 255);
@@ -18,7 +18,7 @@ export default class Circle extends Body {
         });
     }
 
-    override draw(render: Render, wireframe: boolean = false) {
+    override draw(render: LeftRender, wireframe: boolean = false) {
         render.drawCircle3D(this.position.add(-this.radius, this.radius, 0), new Size(this.radius * 2, this.radius * 2), this.color);
 
         if(wireframe) {

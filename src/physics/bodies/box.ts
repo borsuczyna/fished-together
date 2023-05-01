@@ -3,7 +3,7 @@ import Body from "./body";
 import { Bodies } from "matter-js";
 import Color from "../../render/color";
 import { Size, Vector3D } from "../../utils/position";
-import Render from "../../render/render";
+import LeftRender from "../../render/render";
 
 export default class Box extends Body {
     color: Color = new Color(255, 255, 255);
@@ -19,7 +19,7 @@ export default class Box extends Body {
         });
     }
 
-    override draw(render: Render, wireframe: boolean = false) {
+    override draw(render: LeftRender, wireframe: boolean = false) {
         let [position, size] = [this.position.add(-this.size.x/2, this.size.y/2, 0), this.size];
 
         if(this.material) this.material.draw(render, position, size, this.angle);

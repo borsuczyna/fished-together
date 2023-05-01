@@ -1,6 +1,6 @@
 import { Bodies } from "matter-js";
 import { Vector3D } from "../../utils/position";
-import Render from "../../render/render";
+import LeftRender from "../../render/render";
 import { degrees } from "../../utils/angle";
 import Material from "../../material/main";
 
@@ -26,5 +26,5 @@ export default class LeftBody {
         return -degrees(this.body.angle);
     }
 
-    draw(render: Render, wireframe: boolean = false) {}
+    draw(render: LeftRender, wireframe: boolean = false) {}
 }

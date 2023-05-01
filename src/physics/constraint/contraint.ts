@@ -1,11 +1,7 @@
 import { Constraint } from "matter-js";
 import { Vector2D } from "../../utils/position";
-import LeftBody from "../bodies/body";
-
-interface BodyAttachment {
-    body: LeftBody;
-    position?: Vector2D;
-};
+import { BodyAttachment } from "./BodyAttachment";
+import Render from "../../render/render";
 
 export default class LeftConstraint {
     constraint: Constraint;
@@ -35,4 +31,7 @@ export default class LeftConstraint {
         return 0;
     }
     
+    draw(render: Render, wireframe: boolean = false) {
+
+    }
 }

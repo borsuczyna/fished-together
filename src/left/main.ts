@@ -1,7 +1,7 @@
 import Cursor from "../controls/cursor";
 import Keyboard from "../controls/keyboard";
 import Camera from "../render/camera/camera";
-import Render from "../render/render";
+import LeftRender from "../render/render";
 import { Size, Vector3D } from "../utils/position";
 import LeftWorld from "../world/main";
 
@@ -16,7 +16,7 @@ declare const m4: {
 export default class Left {
     canvas: HTMLCanvasElement;
     context: WebGLRenderingContext;
-    render: Render;
+    render: LeftRender;
     world: LeftWorld;
     camera: Camera = new Camera(this);
     
@@ -36,7 +36,7 @@ export default class Left {
         this.context = context;
 
         // Render
-        this.render = new Render(this.context, this);
+        this.render = new LeftRender(this.context, this);
 
         // Physics World
         this.world = new LeftWorld();
