@@ -1,6 +1,4 @@
-import { Vector } from "matter-js";
-
-class Position {
+class Vector {
     x: number;
     y: number;
     z: number | undefined;
@@ -17,8 +15,8 @@ class Position {
         return [this.x, this.y, this.z, this.w];
     }
     
-    add(x?: number | Position, y?: number, z?: number, w?: number): this {
-        if(x instanceof Position) {
+    add(x?: number | Vector, y?: number, z?: number, w?: number): this {
+        if(x instanceof Vector) {
             this.add(x.x, x.y, x.z, x.w);
             return this;
         }
@@ -30,8 +28,8 @@ class Position {
         return this;
     }
     
-    sub(x?: number | Position, y?: number, z?: number, w?: number): this {
-        if(x instanceof Position) {
+    sub(x?: number | Vector, y?: number, z?: number, w?: number): this {
+        if(x instanceof Vector) {
             this.sub(x.x, x.y, x.z, x.w);
             return this;
         }
@@ -43,8 +41,8 @@ class Position {
         return this;
     }
     
-    multiply(x: number | Position, y?: number, z?: number, w?: number): this {
-        if(x instanceof Position) {
+    multiply(x: number | Vector, y?: number, z?: number, w?: number): this {
+        if(x instanceof Vector) {
             this.multiply(x.x, x.y, x.z, x.w);
             return this;
         }
@@ -63,8 +61,8 @@ class Position {
         return this;
     }
     
-    divide(x: number | Position, y?: number, z?: number, w?: number): this {
-        if(x instanceof Position) {
+    divide(x: number | Vector, y?: number, z?: number, w?: number): this {
+        if(x instanceof Vector) {
             this.divide(x.x, x.y, x.z, x.w);
             return this;
         }
@@ -83,8 +81,8 @@ class Position {
         return this;
     }
 
-    set(x?: number | Position, y?: number, z?: number, w?: number) {
-        if(x instanceof Position) {
+    set(x?: number | Vector, y?: number, z?: number, w?: number) {
+        if(x instanceof Vector) {
             this.set(x.x, x.y, x.z, x.w);
             return this;
         }
@@ -112,8 +110,8 @@ class Position {
         return Math.sqrt(squared);
     }
     
-    distance(x: number | Position, y: number, z?: number, w?: number): number {
-        if(x instanceof Position) {
+    distance(x: number | Vector, y: number, z?: number, w?: number): number {
+        if(x instanceof Vector) {
             return this.distance(x.x, x.y, x.z, x.w);
         }
 
@@ -129,8 +127,8 @@ class Position {
         return Math.sqrt(squared);
     }
     
-    dot(x: number | Position, y: number, z?: number, w?: number): number {
-        if(x instanceof Position) {
+    dot(x: number | Vector, y: number, z?: number, w?: number): number {
+        if(x instanceof Vector) {
             return this.dot(x.x, x.y, x.z, x.w);
         }
 
@@ -141,11 +139,11 @@ class Position {
     }
 
     clone() {
-        return new Position(this.x, this.y, this.z, this.w);
+        return new Vector(this.x, this.y, this.z, this.w);
     }
 }
 
-export class Vector2D extends Position {
+export class Vector2D extends Vector {
     constructor(x: number = 0, y: number = 0) {
         super(x, y);
     }
@@ -155,7 +153,7 @@ export class Vector2D extends Position {
     }
 }
 
-export class Vector3D extends Position {
+export class Vector3D extends Vector {
     z: number;
 
     constructor(x: number = 0, y: number = 0, z: number = 0) {
@@ -168,7 +166,7 @@ export class Vector3D extends Position {
     }
 }
 
-export class Vector4D extends Position {
+export class Vector4D extends Vector {
     z: number;
     w: number;
 
@@ -183,7 +181,7 @@ export class Vector4D extends Position {
     }
 }
 
-export class Size extends Position {
+export class Size extends Vector {
     constructor(x: number = 0, y: number = 0) {
         super(x, y);
     }
