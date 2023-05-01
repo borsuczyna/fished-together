@@ -257,6 +257,10 @@ export default class LeftRender {
         })
     }
 
+    drawLine(a: Vector3D, b: Vector3D, color: Color, shader: Shader = this.shaders.rectangle) {
+        let rotation = a.findRotation(b);
+    }
+
     drawCircle(
         position: Vector3D,
         size: Size,

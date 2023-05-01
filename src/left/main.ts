@@ -59,6 +59,11 @@ export default class Left {
             body.draw(this.render, this.wireframe);
         });
 
+        // draw constraints
+        this.world.constraints.forEach(constraint => {
+            constraint.draw(this.render);
+        });
+
         this.render.drawArrays();
 
         return this;

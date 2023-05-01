@@ -62,6 +62,8 @@ function update() {
     light.setPosition(new Vector3D(engine.cursor.position.x, engine.cursor.position.y, 0));
     engine.render.drawRectangle3D(Vector3D.from(c, 1), new Size(5, 5), new Color(255, 0, 0));
     engine.render.setLights([light]);
+
+    // console.log(constraint2.positionA);
 }
 
 requestAnimationFrame(update);

@@ -1,3 +1,5 @@
+import { Vector } from "matter-js";
+
 class Position {
     x: number;
     y: number;
@@ -15,7 +17,12 @@ class Position {
         return [this.x, this.y, this.z, this.w];
     }
     
-    add(x?: number, y?: number, z?: number, w?: number) {
+    add(x?: number | Position, y?: number, z?: number, w?: number): this {
+        if(x instanceof Position) {
+            this.add(x.x, x.y, x.z, x.w);
+            return this;
+        }
+
         if(x) this.x += x;
         if(y) this.y += y;
         if(this.z != undefined && z) this.z += z;
@@ -23,7 +30,12 @@ class Position {
         return this;
     }
     
-    sub(x?: number, y?: number, z?: number, w?: number) {
+    sub(x?: number | Position, y?: number, z?: number, w?: number): this {
+        if(x instanceof Position) {
+            this.sub(x.x, x.y, x.z, x.w);
+            return this;
+        }
+
         if(x) this.x -= x;
         if(y) this.y -= y;
         if(this.z != undefined && z) this.z -= z;
@@ -31,7 +43,12 @@ class Position {
         return this;
     }
     
-    multiply(x: number, y?: number, z?: number, w?: number) {
+    multiply(x: number | Position, y?: number, z?: number, w?: number): this {
+        if(x instanceof Position) {
+            this.multiply(x.x, x.y, x.z, x.w);
+            return this;
+        }
+
         if(!y) {
             this.x *= x;
             this.y *= x;
@@ -46,7 +63,12 @@ class Position {
         return this;
     }
     
-    divide(x: number, y?: number, z?: number, w?: number) {
+    divide(x: number | Position, y?: number, z?: number, w?: number): this {
+        if(x instanceof Position) {
+            this.divide(x.x, x.y, x.z, x.w);
+            return this;
+        }
+
         if(!y) {
             this.x /= x;
             this.y /= x;
@@ -61,7 +83,12 @@ class Position {
         return this;
     }
 
-    set(x?: number, y?: number, z?: number, w?: number) {
+    set(x?: number | Position, y?: number, z?: number, w?: number) {
+        if(x instanceof Position) {
+            this.set(x.x, x.y, x.z, x.w);
+            return this;
+        }
+        
         if(x && this.x != undefined) this.x = x;
         if(y && this.y != undefined) this.y = y;
         if(z && this.z != undefined) this.z = z;
@@ -85,7 +112,11 @@ class Position {
         return Math.sqrt(squared);
     }
     
-    distance(x: number, y: number, z?: number, w?: number) {
+    distance(x: number | Position, y: number, z?: number, w?: number): number {
+        if(x instanceof Position) {
+            return this.distance(x.x, x.y, x.z, x.w);
+        }
+
         let xd = this.x - x;
         let yd = this.y - y;
         let zd = 0;
@@ -98,7 +129,11 @@ class Position {
         return Math.sqrt(squared);
     }
     
-    dot(x: number, y: number, z?: number, w?: number) {
+    dot(x: number | Position, y: number, z?: number, w?: number): number {
+        if(x instanceof Position) {
+            return this.dot(x.x, x.y, x.z, x.w);
+        }
+
         let output = this.x * x + this.y * y;
         if(this.z != undefined && z) output += this.z * z;
         if(this.w != undefined && w) output += this.w * w;
