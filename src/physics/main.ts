@@ -1,4 +1,4 @@
-import { Bodies, Composite, Constraint, Engine, Runner } from "matter-js";
+import { Composite, Engine, Runner } from "matter-js";
 import { Vector2D } from "../utils/position";
 import LeftBody from "./bodies/body";
 import LeftConstraint from "./constraint/contraint";
