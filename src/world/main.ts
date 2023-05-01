@@ -1,9 +1,9 @@
 import Left from "../left/main";
-import Body from "../physics/bodies/body";
+import LeftBody from "../physics/bodies/body";
 import Physics from "../physics/main";
-import { Vector2D } from "../utils/position";
+import { Vector2D, Vector3D } from "../utils/position";
 
-type AddElement = Body;
+type AddElement = LeftBody;
 
 export default class World {
     private physicsEngines: {
@@ -15,8 +15,8 @@ export default class World {
         // where is the badger?
     }
 
-    get bodies(): Body[] {
-        let bodies: Body[] = [];
+    get bodies(): LeftBody[] {
+        let bodies: LeftBody[] = [];
         for(let z in this.physicsEngines) bodies = bodies.concat(this.physicsEngines[z].bodies);
         return bodies;
     }
@@ -49,7 +49,7 @@ export default class World {
         }
         
         // if its physics body
-        if(element instanceof Body) {
+        if(element instanceof LeftBody) {
             let z: number = element.position.z;
             if(!this.physicsEngines[z]) this.createPhysicsEngine(z);
             this.physicsEngines[z].addBody(element);
@@ -57,4 +57,10 @@ export default class World {
 
         return this;
     }
+
+    // createConstraint(element: Body, point: Vector2D) {
+    //     let z = element.position.z;
+    //     if(!this.physicsEngines[z]) this.createPhysicsEngine(z);
+    //     return this.physicsEngines[z].createConstraint(element, point);
+    // }
 }

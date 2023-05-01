@@ -4,7 +4,7 @@ import Render from "../../render/render";
 import { degrees } from "../../utils/angle";
 import Material from "../../material/main";
 
-export default class Body {
+export default class LeftBody {
     defaultPosition: Vector3D;
     body: Matter.Body;
     material?: Material;

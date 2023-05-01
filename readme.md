@@ -1,5 +1,5 @@
 # **Left Engine**
-## Left
+## **Left**
 ## Methods
 ```ts
 let engine = new Left(canvas: HTMLCanvasElement);
@@ -7,6 +7,8 @@ let engine = new Left(canvas: HTMLCanvasElement);
 // update engine
 engine.update();
 ```
+
+## **World**
 
 ## **Render**
 ## Methods
