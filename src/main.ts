@@ -2,6 +2,7 @@ import Left from './left/main';
 import Material from './material/main';
 import Box from './physics/bodies/box';
 import Circle from './physics/bodies/circle';
+import LeftConstraint from './physics/constraint/contraint';
 import FreeCam from './render/camera/freecam';
 
 let player: HTMLCanvasElement = document.getElementById('player') as HTMLCanvasElement;
@@ -33,7 +34,6 @@ let ground = new Box(new Vector3D(-250, 0, 1), new Size(500, 100), true);
 let box1 = new Box(new Vector3D(-250, 250, 1), new Size(80, 80));
 let box2 = new Box(new Vector3D(60, 280, 1), new Size(80, 80));
 let circle = new Circle(new Vector3D(-350, 150, 1), 80);
-engine.world.add([ground, box1, box2, circle]);
 engine.world.gravity = new Vector2D(0, -0.0002);
 
 box1.color = new Color(255, 100, 100);
@@ -43,22 +43,32 @@ circle.color = new Color(100, 100, 255);
 box1.material = new Material('box.png', 'box-normal.png');
 box2.material = new Material('lamp.png');
 
-let constraint = new Vector3D(-70, 350, 1);
+let c = new Vector2D(-70, 350);
+let constraint = new LeftConstraint(c, {
+    body: box2,
+    position: new Vector2D(0, 40)
+});
+
+engine.world.add([ground, box1, box2, circle, constraint]);
 // let c = engine.world.createConstraint(box2, constraint);
 
 function update() {
     requestAnimationFrame(update);
     engine.update();
     light.setPosition(new Vector3D(engine.cursor.position.x, engine.cursor.position.y, 0));
-    engine.render.drawRectangle3D(constraint, new Size(5, 5), new Color(255, 0, 0));
+    engine.render.drawRectangle3D(Vector3D.from(c, 1), new Size(5, 5), new Color(255, 0, 0));
     engine.render.setLights([light]);
 
-    let position = engine.render.getWorldPositionFromScreen(engine.cursor.position, 1);
+    // let position = engine.render.getWorldPositionFromScreen(engine.cursor.position, 1);
     // c.pointB = {
     //     x: position.x,
     //     y: position.y,
     // }
     // constraint = position;
+
+    // if(performance.now() > 800 && engine.world.bodies.includes(box1)) {
+    //     engine.world.remove([constraint]);
+    // }
 }
 
 requestAnimationFrame(update);

@@ -114,6 +114,10 @@ export class Vector2D extends Position {
     constructor(x: number = 0, y: number = 0) {
         super(x, y);
     }
+    
+    static from(vector: Vector2D | Vector3D | Vector4D): Vector2D {
+        return new Vector2D(vector.x, vector.y);
+    }
 }
 
 export class Vector3D extends Position {
@@ -122,6 +126,10 @@ export class Vector3D extends Position {
     constructor(x: number = 0, y: number = 0, z: number = 0) {
         super(x, y, z);
         this.z = z;
+    }
+
+    static from(vector: Vector2D | Vector3D | Vector4D, z: number = 0): Vector3D {
+        return new Vector3D(vector.x, vector.y, vector.z || z);
     }
 }
 
@@ -133,6 +141,10 @@ export class Vector4D extends Position {
         super(x, y, z, w);
         this.z = z;
         this.w = w;
+    }
+    
+    static from(vector: Vector2D | Vector3D | Vector4D, z: number = 0, w: number = 0): Vector4D {
+        return new Vector4D(vector.x, vector.y, vector.z || z, vector.w || w);
     }
 }
 
