@@ -9,6 +9,8 @@ import Light from "./light";
 
 import rectangleShader from '../shader/shaders/rectangle.glsl?raw';
 import circleShader from '../shader/shaders/circle.glsl?raw';
+import lightShader from '../shader/shaders/light.glsl?raw';
+import Barrier from "./barrier";
 
 interface Buffers {
     position: WebGLBuffer;
@@ -75,7 +77,9 @@ export default class LeftRender {
     lightDirection: Vector2D = new Vector2D();
     lightColor: Color = new Color();
     lights: Light[] = [];
-    
+    barriers: Barrier[] = [];
+    private requestedBarriers: Barrier[] = [];
+
     // settings
     normalPower: number = 1;
 
@@ -90,6 +94,7 @@ export default class LeftRender {
         // default shaders
         this.shaders.rectangle = new Shader(context, rectangleShader);
         this.shaders.circle = new Shader(context, circleShader);
+        this.shaders.light = new Shader(context, lightShader);
 
         //  Buffers
         let position = this.context.createBuffer();
@@ -117,6 +122,16 @@ export default class LeftRender {
 
     setLights(lights: Light[]): this {
         this.lights = lights;
+        return this;
+    }
+
+    setBarriers(barriers: Barrier[]): this {
+        this.barriers = barriers;
+        return this;
+    }
+
+    requestBarrier(barrier: Barrier): this {
+        this.requestedBarriers.push(barrier);
         return this;
     }
 
@@ -630,13 +645,13 @@ export default class LeftRender {
     private updateShaderLights(shader: Shader, lights: Light[]) {
         for(let i = 0; i < Settings.MaxLights; i++) {
             let light: Light = lights[i];
+            shader.setValue(`lightActive[${i}]`, !!light, 'bool');
+
             if(light) {
                 shader.setValue(`lightPosition[${i}]`, light.position.clone().array(), 'vec3');
                 shader.setValue(`lightColor[${i}]`, light.color.normalizedArray(), 'vec4');
                 shader.setValue(`lightSize[${i}]`, light.size, 'float');
-                shader.setValue(`lightActive[${i}]`, true, 'bool');
-            } else {
-                shader.setValue(`lightActive[${i}]`, false, 'bool');
+                shader.setValue(`lightVolumetric[${i}]`, light.volumetric, 'float');
             }
         }
     }
@@ -695,5 +710,35 @@ export default class LeftRender {
         }
 
         this.drawCalls = [];
+    }
+
+    private sortBarriers() {
+        if(this.requestedBarriers.length > 0 && this.requestedBarriers.length <= Settings.MaxBarriers) {
+            this.barriers = this.requestedBarriers;
+        } else if(this.requestedBarriers.length > Settings.MaxBarriers) {
+            this.barriers = this.requestedBarriers.slice(0, Settings.MaxBarriers);
+        }
+    }
+
+    drawVolumetricLight() {
+        let shader = this.shaders.light;
+        this.sortBarriers();
+
+        for(let i = 0; i < Settings.MaxBarriers; i++) {
+            let barrier: Barrier = this.barriers[i];
+            shader.setValue(`barrierActive[${i}]`, !!barrier, 'bool');
+
+            if(barrier) {
+                shader.setValue(`barrierType[${i}]`, barrier.type, 'int');
+                shader.setValue(`barrierPosition[${i}]`, this.getScreenFromWorldPosition(barrier.position).array(), 'vec2');
+                shader.setValue(`barrierSize[${i}]`, this.getDimensions(barrier.size, barrier.position.z).array(), 'vec2');
+                shader.setValue(`barrierAngle[${i}]`, -radians(barrier.angle), 'float');
+            }
+        }
+
+        let [width, height] = [this.canvas.width, this.canvas.height];
+        this.drawShader(new Vector3D(0, 0, 0), new Size(width, height), shader);
+        
+        this.requestedBarriers = [];
     }
 }

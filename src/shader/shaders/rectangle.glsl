@@ -26,6 +26,6 @@ PSInput vertexShaderFunction(VSInput VS) {
 }
 
 vec4 pixelShaderFunction(PSInput PS) {
-    PS.Diffuse = applyWorldLights(PS.Diffuse, PS.Normal, PS.ScreenCoord, false);
+    PS.Diffuse = applyWorldLights(PS.Diffuse, PS.Normal, PS.ScreenCoord, false, false);
     return PS.Diffuse;
 }

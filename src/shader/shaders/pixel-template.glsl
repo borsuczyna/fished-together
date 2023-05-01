@@ -22,7 +22,17 @@ uniform vec4 directionalLightColor;
 uniform vec3 lightPosition[MAX_LIGHTS];
 uniform vec4 lightColor[MAX_LIGHTS];
 uniform float lightSize[MAX_LIGHTS];
+uniform float lightVolumetric[MAX_LIGHTS];
 uniform bool lightActive[MAX_LIGHTS];
+
+// Volumetric Barriers
+#define MAX_BARRIERS 16
+
+uniform int barrierType[MAX_BARRIERS];
+uniform vec2 barrierPosition[MAX_BARRIERS];
+uniform vec2 barrierSize[MAX_BARRIERS];
+uniform float barrierAngle[MAX_BARRIERS];
+uniform bool barrierActive[MAX_BARRIERS];
 
 <PixelUniforms>
 
@@ -58,7 +68,7 @@ vec4 applyWorldLight(vec4 color, vec4 screenCoord, vec2 normal, vec3 lightPositi
     return color;
 }
 
-vec4 applyWorldLights(vec4 color, vec2 normal, vec4 screenCoord, bool onlySunLight) {
+vec4 applyWorldLights(vec4 color, vec2 normal, vec4 screenCoord, bool onlySunLight, bool volumetric) {
     float dotValue = dot(normal.xy, directionalLightDir.xy);
     color.rgb *= mix(
         vec3(1, 1, 1),

@@ -5,6 +5,7 @@ export default class Light {
     position: Vector3D = new Vector3D();
     color: Color = new Color();
     size: number = 1;
+    volumetric: number = 0;
 
     setPosition(position: Vector3D) {
         this.position = position;
@@ -18,6 +19,11 @@ export default class Light {
 
     setSize(size: number) {
         this.size = size;
+        return this;
+    }
+
+    setVolumetric(alpha: number) {
+        this.volumetric = alpha;
         return this;
     }
 }

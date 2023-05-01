@@ -28,7 +28,7 @@ PSInput vertexShaderFunction(VSInput VS) {
 }
 
 vec4 pixelShaderFunction(PSInput PS) {
-    PS.Diffuse = applyWorldLights(PS.Diffuse, PS.Normal, PS.ScreenCoord, false);
+    PS.Diffuse = applyWorldLights(PS.Diffuse, PS.Normal, PS.ScreenCoord, false, false);
     
     float dist = distance(PS.CirclePoint.xy, vec2(.5, .5));
     return mix(vec4(PS.Diffuse.rgb, 1), vec4(0, 0, 0, 0), max((dist-.49)/.01, .0));

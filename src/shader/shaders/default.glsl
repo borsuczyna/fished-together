@@ -42,7 +42,7 @@ vec4 pixelShaderFunction(PSInput PS) {
 
     color *= PS.Diffuse;
     color.rgb *= color.a;
-    color = applyWorldLights(color, PS.Normal, PS.ScreenCoord, false);
+    color = applyWorldLights(color, PS.Normal, PS.ScreenCoord, false, false);
 
     return color;
 }

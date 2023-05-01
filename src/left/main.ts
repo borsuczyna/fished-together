@@ -1,8 +1,10 @@
 import Cursor from "../controls/cursor";
 import Keyboard from "../controls/keyboard";
 import Camera from "../render/camera/camera";
+import Color from "../render/color";
 import LeftRender from "../render/render";
-import { Size, Vector3D } from "../utils/position";
+import { radians } from "../utils/angle";
+import { Size, Vector2D, Vector3D } from "../utils/position";
 import LeftWorld from "../world/main";
 
 declare const webglUtils: {
@@ -29,7 +31,7 @@ export default class Left {
 
     constructor(canvas: HTMLCanvasElement) {
         // Basic stuff
-        let context = canvas.getContext('webgl', {premultipliedAlpha: true});
+        let context = canvas.getContext('webgl2', {premultipliedAlpha: true});
         if(!context) throw new Error('Error setting up Left Engine, WebGL not supported!');
 
         this.canvas = canvas;
@@ -61,10 +63,11 @@ export default class Left {
 
         // draw constraints
         this.world.constraints.forEach(constraint => {
-            constraint.draw(this.render);
+            constraint.draw(this.render, this.wireframe);
         });
 
         this.render.drawArrays();
+        this.render.drawVolumetricLight();
 
         return this;
     }

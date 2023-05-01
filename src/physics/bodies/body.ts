@@ -3,11 +3,14 @@ import { Vector3D } from "../../utils/position";
 import LeftRender from "../../render/render";
 import { degrees } from "../../utils/angle";
 import Material from "../../material/main";
+import Barrier from "../../render/barrier";
 
 export default class LeftBody {
     defaultPosition: Vector3D;
     body: Matter.Body;
     material?: Material;
+    barrier?: Barrier;
+    volumetricLight: boolean = true;
 
     constructor(position: Vector3D) {
         this.defaultPosition = position;

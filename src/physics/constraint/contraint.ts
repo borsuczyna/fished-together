@@ -1,5 +1,5 @@
 import { Constraint } from "matter-js";
-import { Size, Vector2D, Vector3D } from "../../utils/position";
+import { Vector2D, Vector3D } from "../../utils/position";
 import { BodyAttachment } from "./BodyAttachment";
 import LeftRender from "../../render/render";
 import Color from "../../render/color";
@@ -49,6 +49,7 @@ export default class LeftConstraint {
     }
     
     draw(render: LeftRender, wireframe: boolean = false) {
+        if(!wireframe) return;
         render.drawLine3D(this.positionA, this.positionB, new Color(0, 255, 0), 3);
     }
 }

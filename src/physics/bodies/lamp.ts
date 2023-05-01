@@ -6,7 +6,7 @@ import { Size, Vector3D } from "../../utils/position";
 import LeftRender from "../../render/render";
 import Barrier from "../../render/barrier";
 
-export default class Box extends Body {
+export default class Lamp extends Body {
     color: Color = new Color(255, 255, 255);
     size: Size;
     body: Matter.Body;
@@ -18,7 +18,7 @@ export default class Box extends Body {
         this.body = Bodies.rectangle(position.x, position.y, size.x, size.y, {
             isStatic
         });
-        this.barrier = new Barrier(position, size);
+        this.barrier = new Barrier(position, new Size(size.x, size.y*0.1));
     }
 
     override draw(render: LeftRender, wireframe: boolean = false) {
@@ -27,9 +27,9 @@ export default class Box extends Body {
         if(this.material) this.material.draw(render, position, size, this.angle);
         else render.drawRectangle3D(position, size, this.color, undefined, this.angle);
 
-        if(this.volumetricLight && this.barrier) {
+        if(this.barrier) {
             render.requestBarrier(this.barrier);
-            this.barrier.position = this.getOffset(Vector3D.from(this.size).multiply(-.5));
+            this.barrier.position = this.getOffset(new Vector3D(-this.size.x/2, this.size.y*0.3, 0));
             this.barrier.angle = this.angle;
         }
 
