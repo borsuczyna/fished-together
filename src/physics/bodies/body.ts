@@ -26,5 +26,11 @@ export default class LeftBody {
         return -degrees(this.body.angle);
     }
 
+    getOffset(offset: Vector3D = new Vector3D(0, 0, 0)) {
+        return this.position.clone().add(
+            offset.clone().rotate(this.angle)
+        ) as Vector3D;
+    }
+
     draw(render: LeftRender, wireframe: boolean = false) {}
 }

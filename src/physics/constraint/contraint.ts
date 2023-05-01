@@ -15,7 +15,7 @@ export default class LeftConstraint {
             pointB: (b instanceof  Vector2D) ? b : b.position,
             bodyA:  (a instanceof  Vector2D) ? undefined : a.body.body,
             bodyB:  (b instanceof  Vector2D) ? undefined : b.body.body,
-            length
+            length,
         });
 
         this.a = a;
@@ -34,7 +34,7 @@ export default class LeftConstraint {
 
     get positionA(): Vector3D {
         if(!(this.a instanceof Vector2D)) {
-            return this.a.body.position.clone() as Vector3D;
+            return this.a.body.getOffset(new Vector3D(this.a.position.x, -this.a.position.y)) as Vector3D;
         } else {
             return new Vector3D(this.a.x, this.a.y, this.z);
         }
@@ -42,19 +42,13 @@ export default class LeftConstraint {
 
     get positionB(): Vector3D {
         if(!(this.b instanceof Vector2D)) {
-            return this.b.body.position.clone() as Vector3D;
+            return this.b.body.getOffset(new Vector3D(this.b.position.x, -this.b.position.y)) as Vector3D;
         } else {
             return new Vector3D(this.b.x, this.b.y, this.z);
         }
     }
     
     draw(render: LeftRender, wireframe: boolean = false) {
-        let change = this.positionB.sub(this.positionA).multiply(.1);
-        let ap: Vector3D = this.positionA;
-        let size = new Size(11, 11);
-
-        for(let p = 0; p < 1; p += .1) {
-            render.drawRectangle3D(ap.add(change), size, new Color(0, 255, 0), undefined, 45);
-        }
+        render.drawLine3D(this.positionA, this.positionB, new Color(0, 255, 0), 3);
     }
 }

@@ -1,3 +1,5 @@
+import { degrees, radians } from "./angle";
+
 class Vector {
     x: number;
     y: number;
@@ -110,13 +112,13 @@ class Vector {
         return Math.sqrt(squared);
     }
     
-    distance(x: number | Vector, y: number, z?: number, w?: number): number {
+    distance(x: number | Vector, y?: number, z?: number, w?: number): number {
         if(x instanceof Vector) {
             return this.distance(x.x, x.y, x.z, x.w);
         }
 
         let xd = this.x - x;
-        let yd = this.y - y;
+        let yd = this.y - (y || 0);
         let zd = 0;
         let wd = 0;
         if(z && this.z != undefined) zd = this.z - z;
@@ -127,12 +129,12 @@ class Vector {
         return Math.sqrt(squared);
     }
     
-    dot(x: number | Vector, y: number, z?: number, w?: number): number {
+    dot(x: number | Vector, y?: number, z?: number, w?: number): number {
         if(x instanceof Vector) {
             return this.dot(x.x, x.y, x.z, x.w);
         }
 
-        let output = this.x * x + this.y * y;
+        let output = this.x * x + this.y * (y || 0);
         if(this.z != undefined && z) output += this.z * z;
         if(this.w != undefined && w) output += this.w * w;
         return output;
@@ -140,6 +142,28 @@ class Vector {
 
     clone() {
         return new Vector(this.x, this.y, this.z, this.w);
+    }
+
+    findRotation(x: number | Vector, y?: number): number {
+        if(x instanceof Vector) {
+            return this.findRotation(x.x, x.y);
+        }
+
+        const deltaX = x - this.x;
+        const deltaY = (y || 0) - this.y;
+        
+        const yaw = Math.atan2(deltaY, deltaX);
+        
+        return -degrees(yaw);
+    }
+
+    rotate(angle: number): this {
+        let distance = this.length();
+        let currentAngle = this.findRotation(0, 0);
+        this.x = distance * Math.cos(radians(currentAngle - angle + 180));
+        this.y = distance * Math.sin(radians(currentAngle - angle + 180));
+
+        return this;
     }
 }
 

@@ -13,6 +13,7 @@ export default class Physics {
     constructor() {
         this.engine = Engine.create();
         this.runner = Runner.create();
+        this.engine.timing.timeScale = .5;
 
         this.gravity = new Vector2D(0, -.0002);
     }
@@ -62,15 +63,4 @@ export default class Physics {
 
         return this;
     }
-
-    // createConstraint(element: Body, point: Vector2D) {
-    //     let constraint = Constraint.create({ 
-    //         pointA: { x: point.x, y: point.y },
-    //         bodyB: element.body,
-    //         pointB: { x: 0, y: 30 },
-    //         stiffness: 0
-    //     });
-    //     Composite.add(this.engine.world, constraint);
-    //     return constraint;
-    // }
 }

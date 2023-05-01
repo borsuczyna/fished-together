@@ -257,8 +257,16 @@ export default class LeftRender {
         })
     }
 
-    drawLine(a: Vector3D, b: Vector3D, color: Color, shader: Shader = this.shaders.rectangle) {
-        // let rotation = a.findRotation(b);
+    drawLine(a: Vector3D, b: Vector3D, color: Color, width: number, shader: Shader = this.shaders.rectangle) {
+        let rotation = a.findRotation(b);
+        let length = a.distance(b);
+        this.drawRectangle(a, new Size(length, width), color, shader, rotation, new Vector2D(0, 0.5));
+    }
+
+    drawLine3D(a: Vector3D, b: Vector3D, color: Color, width: number, shader: Shader = this.shaders.rectangle) {
+        let rotation = a.findRotation(b);
+        let length = a.distance(b);
+        this.drawRectangle3D(a, new Size(length, width), color, shader, rotation, new Vector2D(0, 0.5));
     }
 
     drawCircle(

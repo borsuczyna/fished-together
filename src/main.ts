@@ -30,18 +30,15 @@ engine.camera = new FreeCam(engine);
 let light: Light = new Light().setSize(100).setColor(new Color(1500/3, 1000/3, 0));
 
 // physics test
-let ground = new Box(new Vector3D(-250, 0, 1), new Size(500, 100), true);
+let ground = new Box(new Vector3D(-250, 0, 1), new Size(900, 100), true);
 let box1 = new Box(new Vector3D(60, 250, 1), new Size(80, 80));
 let box2 = new Box(new Vector3D(60, 460, 1), new Size(80, 80));
 let circle = new Circle(new Vector3D(-350, 150, 1), 80);
 engine.world.gravity = new Vector2D(0, -0.0002);
 
-box1.color = new Color(255, 100, 100);
-box2.color = new Color(100, 255, 100);
-circle.color = new Color(100, 100, 255);
-
 box1.material = new Material('box.png', 'box-normal.png');
 box2.material = new Material('lamp.png');
+circle.color = new Color(100, 100, 255);
 
 let c = new Vector2D(-70, 550);
 let constraint = new LeftConstraint(c, {
@@ -50,11 +47,15 @@ let constraint = new LeftConstraint(c, {
 });
 let constraint2 = new LeftConstraint({
     body: box1,
+    position: new Vector2D(0, 40)
 }, {
-    body: box2
+    body: box2,
+    position: new Vector2D(0, -40)
 });
 
 engine.world.add([ground, box1, box2, circle, constraint, constraint2]);
+
+// box1.body.angle = .03;
 
 function update() {
     requestAnimationFrame(update);
@@ -62,6 +63,10 @@ function update() {
     light.setPosition(new Vector3D(engine.cursor.position.x, engine.cursor.position.y, 0));
     engine.render.drawRectangle3D(Vector3D.from(c, 1), new Size(5, 5), new Color(255, 0, 0));
     engine.render.setLights([light]);
+
+    let position = box1.getOffset(new Vector3D(0, 40, 0));
+    position.z = 0.999;
+    engine.render.drawRectangle3D(position, new Size(6, 6), new Color(0, 255, 0));
 
     // console.log(constraint2.positionA);
 }
