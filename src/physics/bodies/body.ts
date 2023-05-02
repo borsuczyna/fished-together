@@ -66,5 +66,5 @@ export default class LeftBody {
         ) as Vector3D;
     }
 
-    draw(render: LeftRender, wireframe: boolean = false) {}
+    draw(render: LeftRender, wireframe: boolean = false) {render; wireframe;}
 }

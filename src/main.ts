@@ -30,7 +30,7 @@ engine.wireframe = true;
 engine.camera = new FreeCam(engine);
 
 let light: Light = new Light().setSize(300).setColor(new Color(1500/3, 0, 0)).setVolumetric(.1);
-let light2: Light = new Light().setSize(300).setColor(new Color(0, 1500/3, 0)).setVolumetric(.1);
+// let light2: Light = new Light().setSize(300).setColor(new Color(0, 1500/3, 0)).setVolumetric(.1);
 let light3: Light = new Light().setSize(300).setColor(new Color(1500/3, 1500/3, 0)).setVolumetric(.1);
 
 // physics test

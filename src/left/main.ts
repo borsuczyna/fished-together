@@ -1,10 +1,8 @@
 import Cursor from "../controls/cursor";
 import Keyboard from "../controls/keyboard";
 import Camera from "../render/camera/camera";
-import Color from "../render/color";
 import LeftRender from "../render/render";
-import { radians } from "../utils/angle";
-import { Size, Vector2D, Vector3D } from "../utils/position";
+import { Size, Vector3D } from "../utils/position";
 import LeftWorld from "../world/main";
 
 declare const webglUtils: {

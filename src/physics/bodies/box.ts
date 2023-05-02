@@ -4,7 +4,7 @@ import { Bodies } from "matter-js";
 import Color from "../../render/color";
 import { Size, Vector2D, Vector3D } from "../../utils/position";
 import LeftRender from "../../render/render";
-import Barrier, { BarrierType } from "../../render/barrier";
+import { BarrierType } from "../../render/barrier";
 
 export default class Box extends Body {
     color: Color = new Color(255, 255, 255);

@@ -13,7 +13,6 @@ export default class Gradient extends Shader {
     constructor(context: WebGLRenderingContext, ...colors: Color[]) {
         let returnCode = 'return vec4(1, 0, 0, 1);';
         let colorUniforms = '';
-        let uniforms: number[] = [];
         if(colors.length == 0) throw new Error('Need at least one color for gradient!');
         else if(colors.length == 1) {
             returnCode = 'return color0;';
