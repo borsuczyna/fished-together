@@ -64,6 +64,7 @@ export default class Left {
             constraint.draw(this.render, this.wireframe);
         });
 
+        this.render.drawBloom();
         this.render.drawArrays();
         this.render.drawVolumetricLight();
 

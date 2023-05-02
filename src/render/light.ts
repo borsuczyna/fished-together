@@ -6,6 +6,9 @@ export default class Light {
     color: Color = new Color();
     size: number = 1;
     volumetric: number = 0;
+    bloomSize: number = 20;
+    bloomColor: Color = new Color();
+    bloomSmoothStep: number = -.2;
 
     setPosition(position: Vector3D) {
         this.position = position;

@@ -74,11 +74,22 @@ PSInput vertexShaderFunction(VSInput VS) {
     return PS;
 }
 
+vec4 doubleMix:PIXEL(vec4 a, vec4 b, vec4 c, float n, float t) {
+    return mix(a, c, t);
+}
+
 vec4 pixelShaderFunction(PSInput PS) {
     PS.Diffuse = applyWorldLights(PS.Diffuse, PS.Normal, PS.ScreenCoord, false, false);
 
-    vec4 outColor = vec4(0, 0, 0, 1);
-    
+    vec4 outColor = vec4(0, 0, 0, 0);
+    for(int i = 0; i < MAX_LIGHTS; i++) {
+        if(lightActive[i]) {
+            float fPower = 1.0-aspectDistance2D(PS.ScreenCoord.xy, lightPosition[i].xy/screenSize.xy)/(lightBloomSize[i]/screenSize.x);
+            float f = smoothstep(lightBloomSmoothStep[i], 1.0, 1.0-max(fPower, 0.0));
+            vec4 color = mix(lightBloomColor[i], lightColor[i], .3+f/2.0);
+            outColor = mix(color*lightBloomColor[i].a, outColor, f);
+        }
+    }
 
     return outColor;
 }

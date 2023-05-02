@@ -32,7 +32,12 @@ engine.camera = new FreeCam(engine);
 
 let light: Light = new Light().setSize(300).setColor(new Color(1500/3, 0, 0)).setVolumetric(.1);
 // let light2: Light = new Light().setSize(300).setColor(new Color(0, 1500/3, 0)).setVolumetric(.1);
-let light3: Light = new Light().setSize(300).setColor(new Color(1500/3, 1500/3, 0)).setVolumetric(.05);
+let light3: Light = new Light().setSize(300).setColor(new Color(1500/3, 1500/4, 100)).setVolumetric(.1);
+light.bloomSize = 60;
+light.bloomSmoothStep = -4;
+light3.bloomSmoothStep = -.4;
+light3.bloomSize = 40;
+light3.bloomColor = new Color(255, 255, 255, 150);
 
 // physics test
 let ground = new Box(new Vector3D(-250, 0, 0), new Size(900, 100), true);
@@ -72,7 +77,7 @@ function update() {
     engine.update();
     light.setPosition(new Vector3D(engine.cursor.position.x, engine.cursor.position.y, 0));
     // light2.setPosition(new Vector3D(engine.cursor.position.x - 350, engine.cursor.position.y, 0));
-    light3.setPosition(engine.render.getScreenFromWorldPosition(box2.getOffset(new Vector3D(0, 40, 0))));
+    light3.setPosition(engine.render.getScreenFromWorldPosition(box2.getOffset(new Vector3D(0, 32, 0))));
     engine.render.setLights([light, light3]);
 
     let position = box1.getOffset(new Vector3D(0, 40, 0));

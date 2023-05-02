@@ -23,6 +23,9 @@ uniform vec3 lightPosition[MAX_LIGHTS];
 uniform vec4 lightColor[MAX_LIGHTS];
 uniform float lightSize[MAX_LIGHTS];
 uniform float lightVolumetric[MAX_LIGHTS];
+uniform float lightBloomSize[MAX_LIGHTS];
+uniform vec4 lightBloomColor[MAX_LIGHTS];
+uniform float lightBloomSmoothStep[MAX_LIGHTS];
 uniform bool lightActive[MAX_LIGHTS];
 
 // Volumetric Barriers

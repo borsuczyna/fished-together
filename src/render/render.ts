@@ -10,6 +10,7 @@ import Light from "./light";
 import rectangleShader from '../shader/shaders/rectangle.glsl?raw';
 import circleShader from '../shader/shaders/circle.glsl?raw';
 import lightVolumetricShader from '../shader/shaders/light-volumetric.glsl?raw';
+import lightBloomShader from '../shader/shaders/light-bloom.glsl?raw';
 import Barrier from "./barrier";
 
 interface Buffers {
@@ -95,6 +96,7 @@ export default class LeftRender {
         this.shaders.rectangle = new Shader(context, rectangleShader);
         this.shaders.circle = new Shader(context, circleShader);
         this.shaders.lightVolumetric = new Shader(context, lightVolumetricShader);
+        this.shaders.lightBloom = new Shader(context, lightBloomShader);
 
         //  Buffers
         let position = this.context.createBuffer();
@@ -648,10 +650,13 @@ export default class LeftRender {
             shader.setValue(`lightActive[${i}]`, !!light, 'bool');
 
             if(light) {
-                shader.setValue(`lightPosition[${i}]`, light.position.clone().array(), 'vec3');
+                shader.setValue(`lightPosition[${i}]`, light.position.array(), 'vec3');
                 shader.setValue(`lightColor[${i}]`, light.color.normalizedArray(), 'vec4');
                 shader.setValue(`lightSize[${i}]`, light.size, 'float');
                 shader.setValue(`lightVolumetric[${i}]`, light.volumetric, 'float');
+                shader.setValue(`lightBloomSize[${i}]`, light.bloomSize, 'float');
+                shader.setValue(`lightBloomColor[${i}]`, light.bloomColor.normalizedArray(), 'vec4');
+                shader.setValue(`lightBloomSmoothStep[${i}]`, light.bloomSmoothStep, 'float');
             }
         }
     }
@@ -737,8 +742,15 @@ export default class LeftRender {
         }
 
         let [width, height] = [this.canvas.width, this.canvas.height];
-        this.drawShader(new Vector3D(0, 0, 0), new Size(width, height), shader);
+        this.drawShader(new Vector3D(0, 0, -1), new Size(width, height), shader);
         
         this.requestedBarriers = [];
+    }
+
+    drawBloom() {
+        let shader = this.shaders.lightBloom;
+
+        let [width, height] = [this.canvas.width, this.canvas.height];
+        this.drawShader(new Vector3D(0, 0, -1), new Size(width, height), shader);
     }
 }
