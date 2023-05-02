@@ -1,3 +1,4 @@
+import { Body } from 'matter-js';
 import Left from './left/main';
 import Material from './material/main';
 import Box from './physics/bodies/box';
@@ -31,7 +32,7 @@ engine.camera = new FreeCam(engine);
 
 let light: Light = new Light().setSize(300).setColor(new Color(1500/3, 0, 0)).setVolumetric(.1);
 // let light2: Light = new Light().setSize(300).setColor(new Color(0, 1500/3, 0)).setVolumetric(.1);
-let light3: Light = new Light().setSize(300).setColor(new Color(1500/3, 1500/3, 0)).setVolumetric(.1);
+let light3: Light = new Light().setSize(300).setColor(new Color(1500/3, 1500/3, 0)).setVolumetric(.05);
 
 // physics test
 let ground = new Box(new Vector3D(-250, 0, 0), new Size(900, 100), true);

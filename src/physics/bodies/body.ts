@@ -1,4 +1,4 @@
-import { Bodies } from "matter-js";
+import { Bodies, Body } from "matter-js";
 import { Size, Vector2D, Vector3D } from "../../utils/position";
 import LeftRender from "../../render/render";
 import { degrees } from "../../utils/angle";
@@ -13,7 +13,7 @@ interface BodyBarrier {
 
 export default class LeftBody {
     defaultPosition: Vector3D;
-    body: Matter.Body;
+    rigidBody: Matter.Body;
     material?: Material;
     barrier: Barrier;
     barrierData: BodyBarrier;
@@ -21,7 +21,7 @@ export default class LeftBody {
 
     constructor(position: Vector3D) {
         this.defaultPosition = position;
-        this.body = Bodies.circle(position.x, position.y, 10);
+        this.rigidBody = Bodies.circle(position.x, position.y, 10);
         this.barrier = new Barrier(position, new Size(10, 10));
         this.barrierData = {
             type: BarrierType.Sphere,
@@ -32,14 +32,14 @@ export default class LeftBody {
 
     get position(): Vector3D {
         return new Vector3D(
-            this.body.position.x,
-            this.body.position.y,
+            this.rigidBody.position.x,
+            this.rigidBody.position.y,
             this.defaultPosition.z
         );
     };
 
     get angle(): number {
-        return -degrees(this.body.angle);
+        return -degrees(this.rigidBody.angle);
     }
 
     get width(): number {
@@ -48,6 +48,14 @@ export default class LeftBody {
 
     get height(): number {
         return 10;
+    }
+
+    set mass(mass: number) {
+        Body.setMass(this.rigidBody, mass)
+    }
+
+    get mass(): number {
+        return this.rigidBody.mass;
     }
 
     updateBarrier(render: LeftRender) {

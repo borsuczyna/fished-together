@@ -9,7 +9,7 @@ import Light from "./light";
 
 import rectangleShader from '../shader/shaders/rectangle.glsl?raw';
 import circleShader from '../shader/shaders/circle.glsl?raw';
-import lightShader from '../shader/shaders/light.glsl?raw';
+import lightVolumetricShader from '../shader/shaders/light-volumetric.glsl?raw';
 import Barrier from "./barrier";
 
 interface Buffers {
@@ -94,7 +94,7 @@ export default class LeftRender {
         // default shaders
         this.shaders.rectangle = new Shader(context, rectangleShader);
         this.shaders.circle = new Shader(context, circleShader);
-        this.shaders.light = new Shader(context, lightShader);
+        this.shaders.lightVolumetric = new Shader(context, lightVolumetricShader);
 
         //  Buffers
         let position = this.context.createBuffer();
@@ -721,7 +721,7 @@ export default class LeftRender {
     }
 
     drawVolumetricLight() {
-        let shader = this.shaders.light;
+        let shader = this.shaders.lightVolumetric;
         this.sortBarriers();
 
         for(let i = 0; i < Settings.MaxBarriers; i++) {

@@ -13,7 +13,7 @@ export default class Physics {
     constructor() {
         this.engine = Engine.create();
         this.runner = Runner.create();
-        this.engine.timing.timeScale = .5;
+        this.engine.timing.timeScale = .6;
 
         this.gravity = new Vector2D(0, -.0002);
     }
@@ -25,7 +25,6 @@ export default class Physics {
             y: value.y,
             scale: 1
         }
-        this.engine.timing.timeScale = .1;
     }
 
     get gravity(): Vector2D {
@@ -35,7 +34,7 @@ export default class Physics {
     addBody(body: LeftBody): this {
         if(this.bodies.includes(body)) return this;
         this.bodies.push(body);
-        Composite.add(this.engine.world, [body.body]);
+        Composite.add(this.engine.world, [body.rigidBody]);
         Runner.run(this.runner, this.engine);
 
         return this;
@@ -43,7 +42,7 @@ export default class Physics {
 
     removeBody(body: LeftBody): this {
         if(!this.bodies.includes(body)) return this;
-        Composite.remove(this.engine.world, body.body);
+        Composite.remove(this.engine.world, body.rigidBody);
         this.bodies = this.bodies.filter(b => b !== body);
 
         return this;

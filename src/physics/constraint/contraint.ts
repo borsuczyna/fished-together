@@ -13,8 +13,8 @@ export default class LeftConstraint {
         this.constraint = Constraint.create({
             pointA: (a instanceof  Vector2D) ? a : a.position,
             pointB: (b instanceof  Vector2D) ? b : b.position,
-            bodyA:  (a instanceof  Vector2D) ? undefined : a.body.body,
-            bodyB:  (b instanceof  Vector2D) ? undefined : b.body.body,
+            bodyA:  (a instanceof  Vector2D) ? undefined : a.body.rigidBody,
+            bodyB:  (b instanceof  Vector2D) ? undefined : b.body.rigidBody,
             length,
         });
 
