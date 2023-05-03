@@ -11,7 +11,7 @@ import rectangleShader from '../shader/shaders/rectangle.glsl?raw';
 import circleShader from '../shader/shaders/circle.glsl?raw';
 import lightVolumetricShader from '../shader/shaders/light-volumetric.glsl?raw';
 import lightBloomShader from '../shader/shaders/light-bloom.glsl?raw';
-import Barrier from "./barrier";
+import VolumetricCollider from "./volumetricCollider";
 
 interface Buffers {
     position: WebGLBuffer;
@@ -78,8 +78,8 @@ export default class LeftRender {
     lightDirection: Vector2D = new Vector2D();
     lightColor: Color = new Color();
     lights: Light[] = [];
-    barriers: Barrier[] = [];
-    private requestedBarriers: Barrier[] = [];
+    volumetricColliders: VolumetricCollider[] = [];
+    private requestedVolumetricColliders: VolumetricCollider[] = [];
 
     // settings
     normalPower: number = 1;
@@ -127,13 +127,13 @@ export default class LeftRender {
         return this;
     }
 
-    setBarriers(barriers: Barrier[]): this {
-        this.barriers = barriers;
+    setVolumetricColliders(volumetricColliders: VolumetricCollider[]): this {
+        this.volumetricColliders = volumetricColliders;
         return this;
     }
 
-    requestBarrier(barrier: Barrier): this {
-        this.requestedBarriers.push(barrier);
+    requestVolumetricCollider(volumetricCollider: VolumetricCollider): this {
+        this.volumetricColliders.push(volumetricCollider);
         return this;
     }
 
@@ -717,34 +717,34 @@ export default class LeftRender {
         this.drawCalls = [];
     }
 
-    private sortBarriers() {
-        if(this.requestedBarriers.length > 0 && this.requestedBarriers.length <= Settings.MaxBarriers) {
-            this.barriers = this.requestedBarriers;
-        } else if(this.requestedBarriers.length > Settings.MaxBarriers) {
-            this.barriers = this.requestedBarriers.slice(0, Settings.MaxBarriers);
+    private sortVolumetricColliders() {
+        if(this.requestedVolumetricColliders.length > 0 && this.requestedVolumetricColliders.length <= Settings.MaxVolumetricColliders) {
+            this.volumetricColliders = this.requestedVolumetricColliders;
+        } else if(this.requestedVolumetricColliders.length > Settings.MaxVolumetricColliders) {
+            this.volumetricColliders = this.requestedVolumetricColliders.slice(0, Settings.MaxVolumetricColliders);
         }
     }
 
     drawVolumetricLight() {
         let shader = this.shaders.lightVolumetric;
-        this.sortBarriers();
+        this.sortVolumetricColliders();
 
-        for(let i = 0; i < Settings.MaxBarriers; i++) {
-            let barrier: Barrier = this.barriers[i];
-            shader.setValue(`barrierActive[${i}]`, !!barrier, 'bool');
+        for(let i = 0; i < Settings.MaxVolumetricColliders; i++) {
+            let collider: VolumetricCollider = this.volumetricColliders[i];
+            shader.setValue(`volumetricActive[${i}]`, !!collider, 'bool');
 
-            if(barrier) {
-                shader.setValue(`barrierType[${i}]`, barrier.type, 'int');
-                shader.setValue(`barrierPosition[${i}]`, this.getScreenFromWorldPosition(barrier.position).array(), 'vec2');
-                shader.setValue(`barrierSize[${i}]`, this.getDimensions(barrier.size, barrier.position.z).array(), 'vec2');
-                shader.setValue(`barrierAngle[${i}]`, -radians(barrier.angle), 'float');
+            if(collider) {
+                shader.setValue(`volumetricType[${i}]`, collider.type, 'int');
+                shader.setValue(`volumetricPosition[${i}]`, this.getScreenFromWorldPosition(collider.position).array(), 'vec2');
+                shader.setValue(`volumetricSize[${i}]`, this.getDimensions(collider.size, collider.position.z).array(), 'vec2');
+                shader.setValue(`volumetricAngle[${i}]`, -radians(collider.angle), 'float');
             }
         }
 
         let [width, height] = [this.canvas.width, this.canvas.height];
         this.drawShader(new Vector3D(0, 0, -1), new Size(width, height), shader);
         
-        this.requestedBarriers = [];
+        this.requestedVolumetricColliders = [];
     }
 
     drawBloom() {

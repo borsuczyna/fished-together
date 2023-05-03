@@ -98,12 +98,12 @@ element.material = Material;
 
 // volumetric light collision
 element.volumetricLight = boolean;
-element.barrierData = {
-    type: BarrierType;
+element.volumetricColliderData = {
+    type: VolumetricColliderType;
     size: Size;
     offset: Vector2D;
 };
-element.barrier = Barrier;
+element.volumetricCollider = VolumetricCollider;
 
 // variables and methods
 element.position: Vector3D;

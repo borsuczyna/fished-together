@@ -3,10 +3,10 @@ import { Size, Vector2D, Vector3D } from "../../utils/position";
 import LeftRender from "../../render/render";
 import { degrees } from "../../utils/angle";
 import Material from "../../material/main";
-import Barrier, { BarrierType } from "../../render/barrier";
+import VolumetricCollider, { VolumetricColliderType } from "../../render/volumetricCollider";
 
-interface BodyBarrier {
-    type: BarrierType;
+interface BodyVolumetricCollider {
+    type: VolumetricColliderType;
     size: Size;
     offset: Vector2D;
 };
@@ -15,16 +15,16 @@ export default class LeftBody {
     defaultPosition: Vector3D;
     rigidBody: Matter.Body;
     material?: Material;
-    barrier: Barrier;
-    barrierData: BodyBarrier;
+    volumetricCollider: VolumetricCollider;
+    volumetricColliderData: BodyVolumetricCollider;
     volumetricLight: boolean = true;
 
     constructor(position: Vector3D) {
         this.defaultPosition = position;
         this.rigidBody = Bodies.circle(position.x, position.y, 10);
-        this.barrier = new Barrier(position, new Size(10, 10));
-        this.barrierData = {
-            type: BarrierType.Sphere,
+        this.volumetricCollider = new VolumetricCollider(position, new Size(10, 10));
+        this.volumetricColliderData = {
+            type: VolumetricColliderType.Sphere,
             size: new Size(10, 10),
             offset: new Vector2D(0, 0)
         }
@@ -58,13 +58,13 @@ export default class LeftBody {
         return this.rigidBody.mass;
     }
 
-    updateBarrier(render: LeftRender) {
-        if(this.volumetricLight && this.barrier) {
-            this.barrier.position = this.getOffset(Vector3D.from(this.barrierData.offset).multiply(this.width, this.height));
-            this.barrier.size = this.barrierData.size;
-            this.barrier.type = this.barrierData.type;
-            this.barrier.angle = this.angle;
-            render.requestBarrier(this.barrier);
+    updateVolumetricCollider(render: LeftRender) {
+        if(this.volumetricLight && this.volumetricCollider) {
+            this.volumetricCollider.position = this.getOffset(Vector3D.from(this.volumetricColliderData.offset).multiply(this.width, this.height));
+            this.volumetricCollider.size = this.volumetricColliderData.size;
+            this.volumetricCollider.type = this.volumetricColliderData.type;
+            this.volumetricCollider.angle = this.angle;
+            render.requestVolumetricCollider(this.volumetricCollider);
         }
     }
 

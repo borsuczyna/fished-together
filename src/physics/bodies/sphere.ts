@@ -15,12 +15,12 @@ export default class Sphere extends Body {
         this.rigidBody = Bodies.circle(position.x, position.y, radius, {
             isStatic
         });
-        this.barrierData.size = new Size(radius, radius);
+        this.volumetricColliderData.size = new Size(radius, radius);
     }
 
     override draw(render: LeftRender, wireframe: boolean = false) {
         render.drawCircle3D(this.position.add(-this.radius, this.radius, 0), new Size(this.radius * 2, this.radius * 2), this.color);
-        this.updateBarrier(render);
+        this.updateVolumetricCollider(render);
 
         if(wireframe) {
             for(let vertice of this.rigidBody.vertices) {

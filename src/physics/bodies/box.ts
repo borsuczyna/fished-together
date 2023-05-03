@@ -4,7 +4,7 @@ import { Bodies } from "matter-js";
 import Color from "../../render/color";
 import { Size, Vector2D, Vector3D } from "../../utils/position";
 import LeftRender from "../../render/render";
-import { BarrierType } from "../../render/barrier";
+import { VolumetricColliderType } from "../../render/volumetricCollider";
 
 export default class Box extends Body {
     color: Color = new Color(255, 255, 255);
@@ -18,10 +18,10 @@ export default class Box extends Body {
             isStatic
         });
 
-        // barrier data
-        this.barrierData.size = size;
-        this.barrierData.type = BarrierType.Box;
-        this.barrierData.offset = new Vector2D(-.5, -.5);
+        // volumetric collider data
+        this.volumetricColliderData.size = size;
+        this.volumetricColliderData.type = VolumetricColliderType.Box;
+        this.volumetricColliderData.offset = new Vector2D(-.5, -.5);
     }
 
     get width(): number {
@@ -44,7 +44,7 @@ export default class Box extends Body {
             render.drawRectangle3D(position, size, this.color, undefined, this.angle);
         }
 
-        this.updateBarrier(render);
+        this.updateVolumetricCollider(render);
 
         if(wireframe) {
             for(let vertice of this.rigidBody.vertices) {

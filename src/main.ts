@@ -45,8 +45,8 @@ let box1 = new Box(new Vector3D(60, 250, 0), new Size(80, 80));
 let box2 = new Box(new Vector3D(60, 460, 0), new Size(80, 80));
 let box3 = new Box(new Vector3D(-60, 460, 0), new Size(80, 40));
 let box4 = new Box(new Vector3D(-160, 560, 0), new Size(80, 80));
-box2.barrierData.size = new Size(70, 10);
-box2.barrierData.offset = new Vector2D(-.5 + (5/80), .2);
+box2.volumetricColliderData.size = new Size(70, 10);
+box2.volumetricColliderData.offset = new Vector2D(-.5 + (5/80), .2);
 let sphere = new Sphere(new Vector3D(-350, 150, 0), 80);
 engine.world.gravity = new Vector2D(0, -0.0002);
 

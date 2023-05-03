@@ -7,7 +7,7 @@ export interface Settings {
     DrawCollisionProcession: boolean;
     CollisionCheckIterations: number;
     MaxLights: number;
-    MaxBarriers: number;
+    MaxVolumetricColliders: number;
 };
 
 const Settings: Settings = {
@@ -19,7 +19,7 @@ const Settings: Settings = {
     DrawCollisionProcession: false,
     CollisionCheckIterations: 40,
     MaxLights: 32,
-    MaxBarriers: 16
+    MaxVolumetricColliders: 16
 };
 
 export default Settings;

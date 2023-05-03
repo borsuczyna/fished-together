@@ -78,7 +78,7 @@ vec4 pixelShaderFunction(PSInput PS) {
     PS.Diffuse = applyWorldLights(PS.Diffuse, PS.Normal, PS.ScreenCoord, false, false);
 
     vec4 outColor = vec4(0, 0, 0, 0);
-    if(!barrierActive[0]) {
+    if(!volumetricActive[0]) {
         for(int i = 0; i < MAX_LIGHTS; i++) {
             if(lightActive[i]) {
                 float fPower = 1.0-aspectDistance2D(PS.ScreenCoord.xy, lightPosition[i].xy/screenSize.xy)/(lightSize[i]/screenSize.x);
@@ -91,11 +91,11 @@ vec4 pixelShaderFunction(PSInput PS) {
                 float fPower = 1.0-aspectDistance2D(PS.ScreenCoord.xy, lightPosition[i].xy/screenSize.xy)/(lightSize[i]/screenSize.x);
                 bool hitAnything = false;
 
-                for(int k = 0; k < MAX_BARRIERS; k++) {
-                    if(barrierActive[k]) {
+                for(int k = 0; k < MAX_VOLUMETRICS; k++) {
+                    if(volumetricActive[k]) {
                         if(
-                            barrierType[k] == 0 && lineBoxIntersection(lightPosition[i].xy, PS.ScreenCoord.xy*screenSize.xy, barrierPosition[k], barrierSize[k], barrierAngle[k]) ||
-                            barrierType[k] == 1 && lineSphereIntersect(lightPosition[i].xy, PS.ScreenCoord.xy*screenSize.xy, barrierPosition[k], barrierSize[k].x)
+                            volumetricType[k] == 0 && lineBoxIntersection(lightPosition[i].xy, PS.ScreenCoord.xy*screenSize.xy, volumetricPosition[k], volumetricSize[k], volumetricAngle[k]) ||
+                            volumetricType[k] == 1 && lineSphereIntersect(lightPosition[i].xy, PS.ScreenCoord.xy*screenSize.xy, volumetricPosition[k], volumetricSize[k].x)
                         ) {
                             hitAnything = true;
                             break;

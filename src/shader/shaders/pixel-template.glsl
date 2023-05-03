@@ -28,14 +28,14 @@ uniform vec4 lightBloomColor[MAX_LIGHTS];
 uniform float lightBloomSmoothStep[MAX_LIGHTS];
 uniform bool lightActive[MAX_LIGHTS];
 
-// Volumetric Barriers
-#define MAX_BARRIERS 16
+// Volumetric Lights
+#define MAX_VOLUMETRICS 16
 
-uniform int barrierType[MAX_BARRIERS];
-uniform vec2 barrierPosition[MAX_BARRIERS];
-uniform vec2 barrierSize[MAX_BARRIERS];
-uniform float barrierAngle[MAX_BARRIERS];
-uniform bool barrierActive[MAX_BARRIERS];
+uniform int volumetricType[MAX_VOLUMETRICS];
+uniform vec2 volumetricPosition[MAX_VOLUMETRICS];
+uniform vec2 volumetricSize[MAX_VOLUMETRICS];
+uniform float volumetricAngle[MAX_VOLUMETRICS];
+uniform bool volumetricActive[MAX_VOLUMETRICS];
 
 <PixelUniforms>
 

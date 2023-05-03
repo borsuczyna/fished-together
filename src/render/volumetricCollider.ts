@@ -1,11 +1,11 @@
 import { Size, Vector3D } from "../utils/position";
 
-export enum BarrierType {
+export enum VolumetricColliderType {
     Box, Sphere
 };
 
-export default class Barrier {
-    type: BarrierType = BarrierType.Box;
+export default class VolumetricCollider {
+    type: VolumetricColliderType = VolumetricColliderType.Box;
     position: Vector3D;
     size: Size;
     angle: number;
