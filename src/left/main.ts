@@ -65,8 +65,8 @@ export default class Left {
         });
 
         this.render.drawBloom();
-        this.render.drawArrays();
         this.render.drawVolumetricLight();
+        this.render.drawArrays();
 
         return this;
     }
