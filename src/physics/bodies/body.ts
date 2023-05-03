@@ -58,6 +58,10 @@ export default class LeftBody {
         return this.rigidBody.mass;
     }
 
+    applyForce(force: Vector2D) {
+        Body.applyForce(this.rigidBody, this.position, force);
+    }
+
     updateVolumetricCollider(render: LeftRender) {
         if(this.volumetricLight && this.volumetricCollider) {
             this.volumetricCollider.position = this.getOffset(Vector3D.from(this.volumetricColliderData.offset).multiply(this.width, this.height));

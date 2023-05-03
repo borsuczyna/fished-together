@@ -1,4 +1,3 @@
-import { Body } from 'matter-js';
 import Left from './left/main';
 import Material from './material/main';
 import Box from './physics/bodies/box';
@@ -10,9 +9,9 @@ let player: HTMLCanvasElement = document.getElementById('player') as HTMLCanvasE
 let engine: Left = new Left(player);
 
 // @ts-ignore
-requestAnimationFrame = (callback) => {
-    setTimeout(callback, 0);
-}
+// requestAnimationFrame = (callback) => {
+//     setTimeout(callback, 0);
+// }
 
 // @ts-ignore
 window.engine = engine;
@@ -82,6 +81,15 @@ function update() {
 
     let position = box1.getOffset(new Vector3D(0, 40, 0));
     position.z = 0.999;
+
+    engine.render.drawRectangle3D(box2.getOffset(new Vector3D(0, 40, 0)), new Size(5, 5), new Color(0, 0, 0))
+
+    if(engine.keyboard.isKeyDown('f')) {
+        box2.applyForce(new Vector2D(0, 0.02));
+    }
+    if(engine.keyboard.isKeyDown('g')) {
+        box1.applyForce(new Vector2D(0, 0.02));
+    }
 }
 
 requestAnimationFrame(update);
