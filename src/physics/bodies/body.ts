@@ -4,6 +4,7 @@ import LeftRender from "../../render/render";
 import { degrees } from "../../utils/angle";
 import Material from "../../material/main";
 import VolumetricCollider, { VolumetricColliderType } from "../../render/volumetricCollider";
+import Color from "../../render/color";
 
 interface BodyVolumetricCollider {
     type: VolumetricColliderType;
@@ -79,4 +80,10 @@ export default class LeftBody {
     }
 
     draw(render: LeftRender, wireframe: boolean = false) {render; wireframe;}
+
+    drawWireframe(render: LeftRender) {
+        for(let vertice of this.rigidBody.vertices) {
+            render.drawRectangle3D(new Vector3D(vertice.x - 2, vertice.y + 2, this.position.z), new Size(4, 4), new Color(255, 0, 0));
+        }
+    }
 }
