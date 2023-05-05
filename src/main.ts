@@ -8,10 +8,22 @@ import FreeCam from './render/camera/freecam';
 let player: HTMLCanvasElement = document.getElementById('player') as HTMLCanvasElement;
 let engine: Left = new Left(player);
 
+let fps = {
+    current: 0,
+    last: 0
+}
+
 // @ts-ignore
-// requestAnimationFrame = (callback) => {
-//     setTimeout(callback, 0);
-// }
+requestAnimationFrame = (callback) => {
+    fps.current++;
+    setTimeout(callback, 0);
+}
+
+setInterval(() => {
+    fps.last = fps.current;
+    fps.current = 0;
+    document.querySelector('#fps-counter')!.innerHTML = `${fps.last} fps`;
+}, 1000);
 
 // @ts-ignore
 window.engine = engine;
@@ -28,15 +40,17 @@ engine.wireframe = true;
 
 // set up free cam
 engine.camera = new FreeCam(engine);
+engine.camera.position.set(-50, 250);
 
-let light: Light = new Light().setSize(300).setColor(new Color(1500/3, 0, 0)).setVolumetric(.1);
+let light: Light = new Light().setSize(300).setColor(new Color(1500/3, 0, 0)).setVolumetric(.4);
 // let light2: Light = new Light().setSize(300).setColor(new Color(0, 1500/3, 0)).setVolumetric(.1);
-let light3: Light = new Light().setSize(300).setColor(new Color(1500/3, 1500/4, 100)).setVolumetric(.1);
+let light3: Light = new Light().setSize(300).setColor(new Color(1500/3, 1500/4, 100)).setVolumetric(.4);
 light.bloomSize = 60;
-light.bloomSmoothStep = -4;
-light3.bloomSmoothStep = -.4;
+light.bloomSmoothStep = -.4;
+light.bloomColor = new Color(255, 255, 255, 255);
+light3.bloomSmoothStep = -.1;
 light3.bloomSize = 40;
-light3.bloomColor = new Color(255, 255, 255, 150);
+light3.bloomColor = new Color(255, 255, 255, 255);
 
 // physics test
 let ground = new Box(new Vector3D(-250, 0, 0), new Size(900, 100), true);
@@ -52,6 +66,7 @@ engine.world.gravity = new Vector2D(0, -0.0002);
 box1.material = new Material('box.png', 'box-normal.png');
 box2.material = new Material('lamp.png', 'lamp-normal.png');
 box3.material = new Material('radio.png', 'radio-normal.png');
+box4.material = new Material('box-bulb.png', 'box-normal.png');
 box3.material.offset = new Vector2D(0, -.5);
 box3.material.scale = new Size(1, 1.4);
 sphere.color = new Color(100, 100, 255);
@@ -71,6 +86,7 @@ let constraint2 = new LeftConstraint({
 
 engine.world.add([ground, box1, box2, box3, box4, sphere, constraint, constraint2]);
 engine.world.attachElements(box2, light3, new Vector2D(0, 32));
+engine.world.attachElements(box4, light, new Vector2D(0, -45));
 
 function update() {
     requestAnimationFrame(update);
@@ -85,7 +101,7 @@ function update() {
     let position = box1.getOffset(new Vector3D(0, 40, 0));
     position.z = 0.999;
 
-    engine.render.drawRectangle3D(box2.getOffset(new Vector2D(0, 40)), new Size(5, 5), new Color(0, 0, 0))
+    // engine.render.drawRectangle3D(box2.getOffset(new Vector2D(0, 40)), new Size(5, 5), new Color(0, 0, 0))
 
     if(engine.keyboard.isKeyDown('f')) {
         box2.applyForce(new Vector2D(0, 0.02));

@@ -86,7 +86,7 @@ vec4 pixelShaderFunction(PSInput PS) {
         if(lightActive[i]) {
             float fPower = 1.0-aspectDistance2D(PS.ScreenCoord.xy, lightPosition[i].xy/screenSize.xy)/(lightBloomSize[i]/screenSize.x);
             float f = smoothstep(lightBloomSmoothStep[i], 1.0, 1.0-max(fPower, 0.0));
-            vec4 color = mix(lightBloomColor[i], lightColor[i], .3+f/2.0);
+            vec4 color = mix(lightBloomColor[i], vec4(0, 0, 0, 0), .3+f/2.0);
             outColor = mix(color*lightBloomColor[i].a, outColor, f);
         }
     }

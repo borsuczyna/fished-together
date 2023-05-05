@@ -62,7 +62,7 @@ interface DrawCall {
 };
 
 export default class LeftRender {
-    private drawCalls: DrawCall[] = [];
+    drawCalls: DrawCall[] = [];
     private parent: Left;
     private canvas: HTMLCanvasElement | OffscreenCanvas;
     private context: WebGLRenderingContext;

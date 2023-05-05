@@ -30,7 +30,7 @@ export default class Left {
 
     constructor(canvas: HTMLCanvasElement) {
         // Basic stuff
-        let context = canvas.getContext('webgl2', {premultipliedAlpha: true});
+        let context = canvas.getContext('webgl2', {premultipliedAlpha: false});
         if(!context) throw new Error('Error setting up Left Engine, WebGL not supported!');
 
         this.canvas = canvas;
@@ -48,7 +48,9 @@ export default class Left {
     }
 
     update(): this {
+        // update camera
         this.camera.update();
+        
         this.render.clear();
 
         // draw 2 empty images
@@ -68,8 +70,14 @@ export default class Left {
             constraint.draw(this.render, this.wireframe);
         });
 
+        let drawCalls = [...this.render.drawCalls];
+
+        this.render.drawCalls = [];
         this.render.drawBloom();
         if(Settings.VolumetricLights) this.render.drawVolumetricLight();
+        this.render.drawArrays();
+
+        this.render.drawCalls = drawCalls;
         this.render.drawArrays();
 
         return this;
