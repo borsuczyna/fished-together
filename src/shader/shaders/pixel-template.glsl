@@ -30,12 +30,46 @@ uniform bool lightActive[MAX_LIGHTS];
 
 // Volumetric Lights
 #define MAX_VOLUMETRICS 16
+#define MAX_VOLUMETRIC_EDGES 16
 
 uniform int volumetricType[MAX_VOLUMETRICS];
 uniform vec2 volumetricPosition[MAX_VOLUMETRICS];
 uniform vec2 volumetricSize[MAX_VOLUMETRICS];
 uniform float volumetricAngle[MAX_VOLUMETRICS];
 uniform bool volumetricActive[MAX_VOLUMETRICS];
+
+uniform vec4 volumetricEdge0[MAX_VOLUMETRICS];
+uniform bool volumetricActiveEdge0[MAX_VOLUMETRICS];
+uniform vec4 volumetricEdge1[MAX_VOLUMETRICS];
+uniform bool volumetricActiveEdge1[MAX_VOLUMETRICS];
+uniform vec4 volumetricEdge2[MAX_VOLUMETRICS];
+uniform bool volumetricActiveEdge2[MAX_VOLUMETRICS];
+uniform vec4 volumetricEdge3[MAX_VOLUMETRICS];
+uniform bool volumetricActiveEdge3[MAX_VOLUMETRICS];
+uniform vec4 volumetricEdge4[MAX_VOLUMETRICS];
+uniform bool volumetricActiveEdge4[MAX_VOLUMETRICS];
+uniform vec4 volumetricEdge5[MAX_VOLUMETRICS];
+uniform bool volumetricActiveEdge5[MAX_VOLUMETRICS];
+uniform vec4 volumetricEdge6[MAX_VOLUMETRICS];
+uniform bool volumetricActiveEdge6[MAX_VOLUMETRICS];
+uniform vec4 volumetricEdge7[MAX_VOLUMETRICS];
+uniform bool volumetricActiveEdge7[MAX_VOLUMETRICS];
+uniform vec4 volumetricEdge8[MAX_VOLUMETRICS];
+uniform bool volumetricActiveEdge8[MAX_VOLUMETRICS];
+uniform vec4 volumetricEdge9[MAX_VOLUMETRICS];
+uniform bool volumetricActiveEdge9[MAX_VOLUMETRICS];
+uniform vec4 volumetricEdge10[MAX_VOLUMETRICS];
+uniform bool volumetricActiveEdge10[MAX_VOLUMETRICS];
+uniform vec4 volumetricEdge11[MAX_VOLUMETRICS];
+uniform bool volumetricActiveEdge11[MAX_VOLUMETRICS];
+uniform vec4 volumetricEdge12[MAX_VOLUMETRICS];
+uniform bool volumetricActiveEdge12[MAX_VOLUMETRICS];
+uniform vec4 volumetricEdge13[MAX_VOLUMETRICS];
+uniform bool volumetricActiveEdge13[MAX_VOLUMETRICS];
+uniform vec4 volumetricEdge14[MAX_VOLUMETRICS];
+uniform bool volumetricActiveEdge14[MAX_VOLUMETRICS];
+uniform vec4 volumetricEdge15[MAX_VOLUMETRICS];
+uniform bool volumetricActiveEdge15[MAX_VOLUMETRICS];
 
 <PixelUniforms>
 
@@ -51,11 +85,11 @@ float aspectDistance2D(vec2 position0, vec2 position1) {
 }
 
 vec4 applyWorldLight(vec4 color, vec4 screenCoord, vec2 normal, vec3 lightPosition, vec4 lightColor, float lightSize) {
-    float fPower = 1.0-aspectDistance2D(screenCoord.xy, lightPosition.xy/screenSize.xy)/(lightSize/screenSize.x);
-    float fNormalPower = 1.0-aspectDistance2D(screenCoord.xy, lightPosition.xy/screenSize.xy)/(lightSize/screenSize.x*2.0);
-    float depthPower = max(1.0-(abs(screenCoord.z - lightPosition.z)/4.0), .0);
+    float fPower = smoothstep(-.2, 1.0, 1.0-aspectDistance2D(screenCoord.xy, lightPosition.xy/screenSize.xy)/(lightSize/screenSize.x));
+    float fNormalPower = 1.0-aspectDistance2D(screenCoord.xy, lightPosition.xy/screenSize.xy)/(lightSize/screenSize.x*3.0);
+    float depthPower = max(1.0-(abs(screenCoord.z - lightPosition.z)/4.0), .0)/3.0;
     fPower *= depthPower;
-    fNormalPower *= depthPower;
+    fNormalPower *= depthPower*1.5;
 
     vec2 dir = (lightPosition.xy/screenSize.xy) - screenCoord.xy;
     dir = normalize(dir);

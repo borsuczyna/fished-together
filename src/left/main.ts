@@ -2,6 +2,7 @@ import Cursor from "../controls/cursor";
 import Keyboard from "../controls/keyboard";
 import Camera from "../render/camera/camera";
 import LeftRender from "../render/render";
+import Settings from "../utils/Settings";
 import { Size, Vector3D } from "../utils/position";
 import LeftWorld from "../world/main";
 
@@ -65,7 +66,7 @@ export default class Left {
         });
 
         this.render.drawBloom();
-        this.render.drawVolumetricLight();
+        if(Settings.VolumetricLights) this.render.drawVolumetricLight();
         this.render.drawArrays();
 
         return this;

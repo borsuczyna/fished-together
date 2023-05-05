@@ -11,7 +11,7 @@ import rectangleShader from '../shader/shaders/rectangle.glsl?raw';
 import circleShader from '../shader/shaders/circle.glsl?raw';
 import lightVolumetricShader from '../shader/shaders/light-volumetric.glsl?raw';
 import lightBloomShader from '../shader/shaders/light-bloom.glsl?raw';
-import VolumetricCollider from "./volumetricCollider";
+import VolumetricCollider, { VolumetricColliderType } from "./volumetricCollider";
 
 interface Buffers {
     position: WebGLBuffer;

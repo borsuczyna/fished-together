@@ -1,4 +1,4 @@
-import { Size, Vector3D } from "../utils/position";
+import { Size, Vector2D, Vector3D, Vector4D } from "../utils/position";
 
 export enum VolumetricColliderType {
     Box, Sphere
