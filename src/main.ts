@@ -44,8 +44,8 @@ let box1 = new Box(new Vector3D(60, 250, 0), new Size(80, 80));
 let box2 = new Box(new Vector3D(60, 460, 0), new Size(80, 80));
 let box3 = new Box(new Vector3D(-60, 460, 0), new Size(80, 40));
 let box4 = new Box(new Vector3D(-160, 560, 0), new Size(80, 80));
-// box2.volumetricColliderData.size = new Size(70, 10);
-// box2.volumetricColliderData.offset = new Vector2D(-.5 + (5/80), .2);
+box2.volumetricColliderData.size = new Size(70, 10);
+box2.volumetricColliderData.offset = new Vector2D(-.5 + (5/80), .2);
 let sphere = new Sphere(new Vector3D(-350, 150, 0), 80);
 engine.world.gravity = new Vector2D(0, -0.0002);
 
@@ -70,19 +70,22 @@ let constraint2 = new LeftConstraint({
 });
 
 engine.world.add([ground, box1, box2, box3, box4, sphere, constraint, constraint2]);
+engine.world.attachElements(box2, light3, new Vector2D(0, 32));
 
 function update() {
     requestAnimationFrame(update);
     engine.update();
-    light.setPosition(new Vector3D(engine.cursor.position.x, engine.cursor.position.y, 0));
+    light.setPosition(engine.render.getWorldPositionFromScreen(new Vector2D(engine.cursor.position.x, engine.cursor.position.y)));
     // light2.setPosition(new Vector3D(engine.cursor.position.x - 350, engine.cursor.position.y, 0));
-    light3.setPosition(engine.render.getScreenFromWorldPosition(box2.getOffset(new Vector3D(0, 32, 0))));
+    // light3.setPosition(box2.getOffset(new Vector3D(0, 32, 0)));
+    light3.setPosition(new Vector3D(-70, 338, 0));
+    // light3.position = new Vector3D(0, 0, 0);
     engine.render.setLights([light, light3]);
 
     let position = box1.getOffset(new Vector3D(0, 40, 0));
     position.z = 0.999;
 
-    engine.render.drawRectangle3D(box2.getOffset(new Vector3D(0, 40, 0)), new Size(5, 5), new Color(0, 0, 0))
+    engine.render.drawRectangle3D(box2.getOffset(new Vector2D(0, 40)), new Size(5, 5), new Color(0, 0, 0))
 
     if(engine.keyboard.isKeyDown('f')) {
         box2.applyForce(new Vector2D(0, 0.02));

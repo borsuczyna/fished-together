@@ -19,7 +19,7 @@ let render = new Render(context: WebGLRenderingContext, parent: Left);
 render.clear();
 
 // set lights
-render.setLights(lights: Light[]): this;
+render.setLights(lights: LeftLight[]): this;
 
 // drawing images
 render.drawImage(position: Vector3D, size: Size, url: string, shader?: Shader, color?: Color | Color[], rotation?: number, rotationCenter?: Vector2D);

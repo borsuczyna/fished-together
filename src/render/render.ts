@@ -650,7 +650,7 @@ export default class LeftRender {
             shader.setValue(`lightActive[${i}]`, !!light, 'bool');
 
             if(light) {
-                shader.setValue(`lightPosition[${i}]`, light.position.array(), 'vec3');
+                shader.setValue(`lightPosition[${i}]`, this.getScreenFromWorldPosition(light.position).array(), 'vec3');
                 shader.setValue(`lightColor[${i}]`, light.color.normalizedArray(), 'vec4');
                 shader.setValue(`lightSize[${i}]`, light.size, 'float');
                 shader.setValue(`lightVolumetric[${i}]`, light.volumetric, 'float');

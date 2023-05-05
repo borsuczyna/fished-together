@@ -1,16 +1,25 @@
 import LeftBody from "../physics/bodies/body";
 import LeftConstraint from "../physics/constraint/contraint";
 import Physics from "../physics/main";
-import { Vector2D } from "../utils/position";
+import Light from "../render/light";
+import { Vector2D, Vector3D } from "../utils/position";
 
 type AddElement = LeftBody | LeftConstraint;
-export type LeftElement = LeftBody | LeftConstraint;
+export type LeftElement = LeftBody | LeftConstraint | Light;
+export type LeftAttachElement = LeftBody | Light;
+
+export interface LeftAttachedElement {
+    elementA: LeftAttachElement;
+    elementB: LeftAttachElement;
+    offset: Vector2D;
+};
 
 export default class LeftWorld {
     private physicsEngines: {
         [z: number]: Physics
     } = {};
     private _gravity: Vector2D = new Vector2D(0, -.001);
+    attachedElements: LeftAttachedElement[] = [];
 
     constructor() {
         // where is the badger?
@@ -75,6 +84,27 @@ export default class LeftWorld {
         }
 
         return this;
+    }
+
+    // attaching elements
+    attachElements(elementA: LeftAttachElement, elementB: LeftAttachElement, offset: Vector2D):  this {
+        this.attachedElements.push({
+            elementA,
+            elementB,
+            offset
+        });
+
+        return this;
+    }
+
+    updateAttachedElements() {
+        this.attachedElements.forEach(e => {
+            let { elementA, elementB, offset } = e;
+            let position: Vector3D = elementA.position;
+
+            if(elementA instanceof LeftBody) position = elementA.getOffset(offset);
+            elementB.position = position;
+        });
     }
 
     // Removing elements

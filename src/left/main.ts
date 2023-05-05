@@ -55,6 +55,9 @@ export default class Left {
         this.render.drawImage(new Vector3D(0, 0, 0), new Size(0, 0), '/empty.png');
         this.render.drawImage(new Vector3D(0, 0, 0), new Size(0, 0), '/empty.png');
 
+        // update world attached elements
+        this.world.updateAttachedElements();
+
         // draw bodies
         this.world.bodies.forEach(body => {
             body.draw(this.render, this.wireframe);

@@ -39,6 +39,10 @@ export default class LeftBody {
         );
     };
 
+    set position(position: Vector2D) {
+        Body.setPosition(this.rigidBody, position);
+    }
+
     get angle(): number {
         return -degrees(this.rigidBody.angle);
     }
@@ -73,7 +77,7 @@ export default class LeftBody {
         }
     }
 
-    getOffset(offset: Vector3D = new Vector3D(0, 0, 0)) {
+    getOffset(offset: Vector2D = new Vector2D(0, 0)) {
         return this.position.clone().add(
             offset.clone().rotate(this.angle)
         ) as Vector3D;

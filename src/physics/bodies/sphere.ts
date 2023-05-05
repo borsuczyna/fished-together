@@ -1,10 +1,10 @@
-import Body from "./body";
+import LeftBody from "./body";
 import { Bodies } from "matter-js";
 import Color from "../../render/color";
 import { Size, Vector3D } from "../../utils/position";
 import LeftRender from "../../render/render";
 
-export default class Sphere extends Body {
+export default class Sphere extends LeftBody {
     color: Color = new Color(255, 255, 255);
     radius: number;
 
