@@ -38,39 +38,6 @@ uniform vec2 volumetricSize[MAX_VOLUMETRICS];
 uniform float volumetricAngle[MAX_VOLUMETRICS];
 uniform bool volumetricActive[MAX_VOLUMETRICS];
 
-uniform vec4 volumetricEdge0[MAX_VOLUMETRICS];
-uniform bool volumetricActiveEdge0[MAX_VOLUMETRICS];
-uniform vec4 volumetricEdge1[MAX_VOLUMETRICS];
-uniform bool volumetricActiveEdge1[MAX_VOLUMETRICS];
-uniform vec4 volumetricEdge2[MAX_VOLUMETRICS];
-uniform bool volumetricActiveEdge2[MAX_VOLUMETRICS];
-uniform vec4 volumetricEdge3[MAX_VOLUMETRICS];
-uniform bool volumetricActiveEdge3[MAX_VOLUMETRICS];
-uniform vec4 volumetricEdge4[MAX_VOLUMETRICS];
-uniform bool volumetricActiveEdge4[MAX_VOLUMETRICS];
-uniform vec4 volumetricEdge5[MAX_VOLUMETRICS];
-uniform bool volumetricActiveEdge5[MAX_VOLUMETRICS];
-uniform vec4 volumetricEdge6[MAX_VOLUMETRICS];
-uniform bool volumetricActiveEdge6[MAX_VOLUMETRICS];
-uniform vec4 volumetricEdge7[MAX_VOLUMETRICS];
-uniform bool volumetricActiveEdge7[MAX_VOLUMETRICS];
-uniform vec4 volumetricEdge8[MAX_VOLUMETRICS];
-uniform bool volumetricActiveEdge8[MAX_VOLUMETRICS];
-uniform vec4 volumetricEdge9[MAX_VOLUMETRICS];
-uniform bool volumetricActiveEdge9[MAX_VOLUMETRICS];
-uniform vec4 volumetricEdge10[MAX_VOLUMETRICS];
-uniform bool volumetricActiveEdge10[MAX_VOLUMETRICS];
-uniform vec4 volumetricEdge11[MAX_VOLUMETRICS];
-uniform bool volumetricActiveEdge11[MAX_VOLUMETRICS];
-uniform vec4 volumetricEdge12[MAX_VOLUMETRICS];
-uniform bool volumetricActiveEdge12[MAX_VOLUMETRICS];
-uniform vec4 volumetricEdge13[MAX_VOLUMETRICS];
-uniform bool volumetricActiveEdge13[MAX_VOLUMETRICS];
-uniform vec4 volumetricEdge14[MAX_VOLUMETRICS];
-uniform bool volumetricActiveEdge14[MAX_VOLUMETRICS];
-uniform vec4 volumetricEdge15[MAX_VOLUMETRICS];
-uniform bool volumetricActiveEdge15[MAX_VOLUMETRICS];
-
 <PixelUniforms>
 
 <PixelStruct>
