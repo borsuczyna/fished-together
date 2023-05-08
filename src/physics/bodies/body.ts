@@ -87,7 +87,7 @@ export default class LeftBody {
 
     drawWireframe(render: LeftRender) {
         for(let vertice of this.rigidBody.vertices) {
-            render.drawRectangle3D(new Vector3D(vertice.x - 2, vertice.y + 2, this.position.z), new Size(4, 4), new Color(255, 0, 0));
+            // render.drawRectangle3D(new Vector3D(vertice.x - 2, vertice.y + 2, this.position.z), new Size(4, 4), new Color(255, 0, 0));
         }
     }
 }

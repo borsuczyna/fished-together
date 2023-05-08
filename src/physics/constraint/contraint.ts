@@ -55,6 +55,6 @@ export default class LeftConstraint {
     draw(render: LeftRender, wireframe: boolean = false) {
         if(!wireframe) return;
         render.drawLine3D(this.positionA, this.positionB, new Color(0, 255, 0), 3);
-        render.drawRectangle3D(this.positionA, new Size(5, 5), new Color(255, 255, 0));
+        // render.drawRectangle3D(this.positionA, new Size(5, 5), new Color(255, 255, 0));
     }
 }

@@ -15,6 +15,7 @@ declare const m4: {
 };
 
 export default class Left {
+    private lastUpdate: number = 0;
     canvas: HTMLCanvasElement;
     context: WebGLRenderingContext;
     render: LeftRender;
@@ -45,20 +46,26 @@ export default class Left {
         // Controllers
         this.cursor = new Cursor(canvas);
         this.keyboard = new Keyboard(canvas);
+
+        // set up first update
+        this.lastUpdate = Date.now();
     }
 
     update(): this {
+        let dt = Math.min((Date.now() - this.lastUpdate)/1000, .02);
         // update camera
         this.camera.update();
-        
+
+        // render
         this.render.clear();
 
         // draw 2 empty images
         this.render.drawImage(new Vector3D(0, 0, 0), new Size(0, 0), '/empty.png');
         this.render.drawImage(new Vector3D(0, 0, 0), new Size(0, 0), '/empty.png');
 
-        // update world attached elements
+        // update world elements
         this.world.updateAttachedElements();
+        this.world.updateWind(dt);
 
         // draw bodies
         this.world.bodies.forEach(body => {

@@ -2,6 +2,7 @@ import LeftBody from "../physics/bodies/body";
 import LeftConstraint from "../physics/constraint/contraint";
 import Physics from "../physics/main";
 import Light from "../render/light";
+import Noise from "../utils/noise";
 import { Vector2D, Vector3D } from "../utils/position";
 
 type AddElement = LeftBody | LeftConstraint;
@@ -19,6 +20,9 @@ export default class LeftWorld {
         [z: number]: Physics
     } = {};
     private _gravity: Vector2D = new Vector2D(0, -.001);
+    wind: Vector2D = new Vector2D(0, 0);
+    windSpeed: number = 1;
+    windNoise: Noise = new Noise();
     attachedElements: LeftAttachedElement[] = [];
 
     constructor() {
@@ -47,6 +51,7 @@ export default class LeftWorld {
 
     private createPhysicsEngine(z: number) {
         this.physicsEngines[z] = new Physics();
+        this.physicsEngines[z].gravity = this._gravity;
     }
 
     // Gravity
@@ -71,7 +76,7 @@ export default class LeftWorld {
         if(Array.isArray(element)) {
             element.forEach(e => this.add(e));
         }
-        
+
         // if its physics body
         if(element instanceof LeftBody) {
             let z: number = element.position.z;
@@ -112,7 +117,7 @@ export default class LeftWorld {
         if(Array.isArray(element)) {
             element.forEach(e => this.remove(e));
         }
-        
+
         // if its physics body
         if(element instanceof LeftBody) {
             let z: number = element.position.z;
@@ -123,5 +128,14 @@ export default class LeftWorld {
         }
 
         return this;
+    }
+
+    // wind
+    updateWind(dt: number) {
+        let wind = this.windNoise.getValue(Date.now()*0.01*this.windSpeed);
+        
+        for(let body of this.bodies) {
+            body.applyForce(this.wind.clone().multiply(wind * dt));
+        }
     }
 }
